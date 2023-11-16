@@ -426,33 +426,34 @@ public class Solution {
 }
 ```
 
-这个技巧我自己称之为**多路归并**（实现想不到什么好的名字），我也会在后面的**三个技巧**也会对此方法使用堆来优化。
+I personally refer to this technique as **multi-way merge** (I can't think of a better name), and I will also optimize this method using a heap in the later section "Three Techniques."
 
-由于这里的指针是动态的，指针的数量其实和题目给的 primes 数组长度一致。因此实际上，我们可以使用记忆化递归的形式来完成，**递归体和递归栈分别维护一个迭代变量即可**。而这道题其实可以看出是一个状态机，因此使用动态规划来解决是符合直觉的。而这里，介绍一种堆的解法，相比于动态规划，个人认为更简单和符合直觉。
+Since the pointers are dynamic and their number corresponds to the length of the primes array given in the problem, we can actually use memoized recursion to solve this. Maintain an iteration variable in the recursion body and the recursion stack. This problem can be seen as a state machine, so using dynamic programming to solve it aligns with intuition. However, here I introduce a heap-based solution, which I personally find simpler and more intuitive.
 
-> 关于状态机，我这里有一篇文章[原来状态机也可以用来刷 LeetCode？](https://lucifer.ren/blog/2020/01/12/1262.greatest-sum-divisible-by-three/ "原来状态机也可以用来刷 LeetCode？")，大家可以参考一下哦。
+> Regarding state machines, I have an article [Can State Machines Be Used to Solve LeetCode Problems?](https://lucifer.ren/blog/2020/01/12/1262.greatest-sum-divisible-by-three/) that you might find useful.
 
-实际上，我们可以**动态**维护一个当前最小的超级丑数。找到第一个， 我们将其移除，再找**下一个当前最小的超级丑数**（也就是全局第二小的超级丑数）。这样经过 n 轮，我们就得到了第 n 小的超级丑数。这种动态维护极值的场景正是堆的用武之地。
+In fact, we can **dynamically** maintain the current smallest super ugly number. After finding the first one, we remove it and then find the **next current smallest super ugly number** (which is the globally second smallest super ugly number). After n rounds, we get the nth smallest super ugly number. This scenario of dynamically maintaining extreme values is exactly what heaps are for.
 
-> 有没有觉得和上面石头的题目很像？
 
-以题目给的例子 [2,7,13,19] 来说。
+> Does this remind you of the stone problem mentioned earlier?
 
-1. 将 [2,7,13,19] 依次入堆。
-2. 出堆一个数字，也就是 2。这时取到了**第一个**超级丑数。
-3. 接着将 2 和 [2,7,13,19] 的乘积，也就是 [4,14,26,38] 依次入堆。
-4. 如此反复直到取到第 n 个超级丑数。
+Taking the given example [2,7,13,19]:
 
-上面的正确性是毋庸置疑的，由于每次堆都可以取到最小的，每次我们也会将最小的从堆中移除。因此取 n 次自然就是第 n 大的超级丑数了。
+1. Put [2,7,13,19] into the heap.
+2. Remove one number from the heap, which is 2. This gives us the **first** super ugly number.
+3. Then, put the products of 2 and [2,7,13,19], i.e., [4,14,26,38], into the heap.
+4. Repeat this process until we get the nth super ugly number.
 
-堆的解法没有太大难度，唯一需要注意的是去重。比如 2 \* 13 = 26，而 13 \* 2 也是 26。我们不能将 26 入两次堆。解决的方法也很简单：
+The correctness of the above approach is unquestionable. Since the heap always provides the smallest number and we remove the smallest number each time, naturally, after n iterations, we get the nth largest super ugly number.
 
-- 要么使用哈希表记录全部已经取出的数，对于已经取出的数字不再取即可。
-- 另一种方法是记录上一次取出的数，由于取出的数字是按照**数字大小不严格递增**的，这样只需要拿上次取出的数和本次取出的数比较一下就知道了。
+The heap solution is not very difficult; the only thing to be mindful of is eliminating duplicates. For instance, 2 * 13 = 26 and 13 * 2 is also 26. We cannot put 26 into the heap twice. There are simple solutions to this:
 
-用哪种方法不用多说了吧？
+- Either use a hash table to record all numbers that have been removed and avoid repeating them.
+- Another method is to record the last number removed. Since the numbers removed from the heap are in non-strictly increasing order, you can simply compare the last number removed with the current number to determine if it's a duplicate.
 
-#### 代码
+Which method to use should be clear, right?
+
+#### Code
 
 Java Code:
 
@@ -478,87 +479,87 @@ class Solution {
 }
 ```
 
-> ans 初始化为 1 的作用相当于虚拟头，仅仅起到了简化操作的作用
+> The initialization of `ans` to 1 acts like a virtual head, solely for simplifying operations.
 
-### 小结
+### Summary
 
-堆的中心就一个，那就是**动态求极值**。
+The central concept of heaps is **dynamically finding extreme** values.
 
-而求极值无非就是最大值或者最小值，这不难看出。如果求最大值，我们可以使用大顶堆，如果求最小值，可以用最小堆。
+Extreme values are essentially the maximum or minimum values, which is straightforward. If we need the maximum value, we can use a max heap, and for the minimum value, a min heap is suitable.
 
-而实际上，如果没有动态两个字，很多情况下没有必要使用堆。比如可以直接一次遍历找出最大的即可。而动态这个点不容易看出来，这正是题目的难点。这需要你先对问题进行分析， 分析出这道题**其实就是动态求极值**，那么使用堆来优化就应该被想到。类似的例子有很多，我也会在后面的小节给大家做更多的讲解。
+In fact, without the dynamic aspect, heaps are often unnecessary. For example, you can simply traverse once to find the maximum value. The dynamic aspect is not always obvious, and that's where the difficulty of the problem lies. You need to analyze the problem to discern that it is indeed about **dynamically finding extreme values**, and then think of using a heap for optimization. There are many examples like this, and I will explain more in later sections.
 
-## 两种实现
+## Two Implementations
 
-上面简单提到了堆的几种实现。这里介绍两种常见的实现，一种是基于链表的实现- 跳表，另一种是基于数组的实现 - 二叉堆。
+Earlier, we briefly mentioned a few implementations of heaps. Here, I'll introduce two common implementations: one based on linked lists - Skip Lists, and the other based on arrays - Binary Heaps.
 
-使用跳表的实现，如果你的算法没有经过精雕细琢，性能会比较不稳定，且在数据量大的情况下内存占用会明显增加。 因此我们仅详细讲述二叉堆的实现，而对于跳表的实现，仅讲述它的基本原理，对于代码实现等更详细的内容由于比较偏就不在这里讲了。
+Using Skip Lists, if your algorithm isn't finely tuned, the performance can be unstable, and the memory usage can increase significantly with large data volumes. Therefore, we will detail the implementation of Binary Heaps, and for Skip Lists, we'll only discuss the basic principles. Detailed code implementation and other specifics will not be covered here as they are more niche.
 
-### 跳表
+### Skip Lists
 
-跳表也是一种数据结构，因此 ta 其实也是服务于某种算法的。
+Skip Lists are also a type of data structure, thus they serve some algorithms as well.
 
-跳表虽然在面试中出现的频率不大，但是在工业中，跳表会经常被用到。力扣中关于跳表的题目只有一个。但是跳表的设计思路值得我们去学习和思考。 其中有很多算法和数据结构技巧值得我们学习。比如空间换时间的思想，比如效率的取舍问题等。
+Although Skip Lists are not frequently encountered in interviews, they are often used in industry. LeetCode has only one problem about Skip Lists. However, the design principles of Skip Lists are worth learning and contemplating. They contain many algorithmic and data structural techniques worth learning, such as the idea of trading space for time, efficiency trade-offs, and more.
 
-上面提到了应付插队问题是设计**堆**应该考虑的首要问题。堆的跳表实现是如何解决这个问题的呢？
+We mentioned earlier that handling queue-jumping is a primary consideration when designing **heaps**. How does the implementation of Skip Lists in heaps solve this problem?
 
-我们知道，不借助额外空间的情况下，在链表中查找一个值，需要按照顺序一个个查找，时间复杂度为 $O(N)$，其中 N 为链表长度。
+We know that without additional space, searching for a value in a linked list requires checking each element in sequence, with a time complexity of $O(N)$，where N  is the length of the list.
 
 ![](https://p.ipic.vip/7k87vh.jpg)
 
-（单链表）
+(Singly Linked List)
 
-当链表长度很大的时候， 这种时间是很难接受的。 一种常见的的优化方式是**建立哈希表，将所有节点都放到哈希表中，以空间换时间的方式减少时间复杂度**，这种做法时间复杂度为 $O(1)$，但是空间复杂度为 $O(N)$。
+When the length of the list is large, this kind of search time is unacceptable. A common optimization is to create a hash table with all nodes in it, trading space for time to reduce the time complexity. This method has a time complexity of $O(1)$， but a space complexity of $O(N)$。
 
 ![](https://p.ipic.vip/e3aci5.jpg)
 
-（单链表 + 哈希表）
+(Singly Linked List + Hash Table)
 
-为了防止链表中出现重复节点带来的问题，我们需要序列化节点，再建立哈希表，这种空间占用会更高，虽然只是系数级别的增加，但是这种开销也是不小的 。更重要的是，哈希表不能解决查找极值的问题，其仅适合根据 key 来获取内容。
+To prevent issues with duplicate nodes in the linked list, we need to serialize the nodes before building the hash table. This approach uses even more space, and although the increase is only a factor, the overhead is not negligible. More importantly, a hash table cannot solve the problem of finding extreme values; it is only suitable for retrieving content based on a key.
 
-为了解决上面的问题，跳表应运而生。
+To address these issues, Skip Lists were introduced.
 
-如下图所示，我们从链表中每两个元素抽出来，加一级索引，一级索引指向了原始链表，即：通过一级索引 7 的 down 指针可以找到原始链表的 7 。那怎么查找 10 呢？
+As shown in the following image, we extract every second element from the linked list and add a level of indexing. The first-level index points to the original linked list; for example, through the down pointer of index 7, we can find the original 7 in the linked list. But how do we find 10?
 
-> 注意这个算法要求链表是有序的。
+> Note that this algorithm requires the linked list to be ordered.
 
 ![](https://p.ipic.vip/oziotf.jpg)
 
-（建立一级索引）
+(Establishing a First-Level Index)
 
-我们可以：
+We can:
 
-- 通过现在一级跳表中搜索到 7，发现下一个 18 大于 10 ，也就是说我们要找的 10 在这两者之间。
-- 通过 down 指针回到原始链表，通过原始链表的 next 指针我们找到了 10。
+- Search in the current first-level skip list and find 7. We see that the next number, 18, is greater than 10, which means the 10 we are looking for is between these two numbers.
+- Use the down pointer to go back to the original linked list and find 10 through the next pointer.
 
-这个例子看不出性能提升。但是如果元素继续增大， 继续增加索引的层数，建立二级，三级。。。索引，使得链表能够实现二分查找，从而获得更好的效率。但是相应地，我们需要付出额外空间的代价。
+The performance improvement is not apparent in this example. However, if the number of elements continues to increase, and we continue to add more levels of indexing (second level, third level, etc.), the linked list can achieve binary search efficiency. But correspondingly, we pay the cost of additional space.
 
 ![](https://p.ipic.vip/5av4uh.jpg)
 
-（增加索引层数）
+(Adding More Levels of Indexing)
 
-理解了上面的点，你可以形象地将跳表想象为玩游戏的**存档**。
+Understanding this, you can metaphorically think of Skip Lists as **save points** in a game.
 
-一个游戏有 10 关。如果我想要玩第 5 关的某一个地方，那么我可以直接从第五关开始，这样要比从第一关开始快。我们甚至可以在每一关同时设置很多的存档。这样我如果想玩第 5 关的某一个地方，也可以不用从第 5 关的开头开始，而是直接选择**离你想玩的地方更近的存档**，这就相当于跳表的二级索引。
+Imagine a game with 10 levels. If you want to play a specific part of level 5, you can start directly from level 5, which is faster than starting from level 1. We can even set many save points in each level. If you want to play a specific part of level 5, you can start not from the beginning of level 5 but directly from a save point closer to where you want to play, similar to a second-level index in a Skip List.
 
-跳表的时间复杂度和空间复杂度不是很好分析。由于时间复杂度 = 索引的高度 \* 平均每层索引遍历元素的个数，而高度大概为 $logn$，并且每层遍历的元素是常数，因此时间复杂度为 $logn$，和二分查找的空间复杂度是一样的。
+The time and space complexity of Skip Lists are not straightforward to analyze. Since the time complexity = height of the index * the average number of elements traversed per index level, and the height is approximately $logn$，with each level traversing a constant number of elements, the time complexity is $O(logn)$，the same as binary search.。
 
-空间复杂度就等同于索引节点的个数，以每两个节点建立一个索引为例，大概是 n/2 + n/4 + n/8 + … + 8 + 4 + 2 ，因此空间复杂度是 $O(n)$。当然你如果每三个建立一个索引节点的话，空间会更省，但是复杂度不变。
+The space complexity is equivalent to the number of index nodes. For example, if we establish an index for every two nodes, it's roughly n/2 + n/4 + n/8 + ... + 8 + 4 + 2, so the space complexity is $O(n)$. Of course, if you create an index node for every three nodes, it saves more space, but the complexity remains the same.
 
-理解了上面的内容，使用跳表实现堆就不难了。
+With this understanding, implementing heaps with Skip Lists is straightforward:
 
-- 入堆操作，只需要根据索引插到链表中，并更新索引（可选）。
-- 出堆操作，只需要删除头部（或者尾部），并更新索引（可选）。
+- For heap insertions, insert into the linked list based on the index and update the index (optional).
+- For heap deletions, remove from the head (or tail) and update the index (optional).
 
-大家如果想检测自己的实现是否有问题，可以去力扣的[1206. 设计跳表](https://leetcode-cn.com/problems/design-skiplist/) 检测。
+If you want to test your implementation, you can try LeetCode's [1206. Design Skiplist.](https://leetcode-cn.com/problems/design-skiplist/) 
 
-接下来，我们看下一种更加常见的实现 - 二叉堆。
+Next, let's look at another more common implementation - Binary Heaps.
 
-### 二叉堆
+### Binary Heap
 
-二叉堆的实现，我们仅讲解最核心的两个操作： heappop（出堆） 和 heappush（入堆）。对于其他操作不再讲解，不过我相信你会了这两个核心操作，其他的应该不是难事。
+For the implementation of a binary heap, we will only explain the two core operations: `heappop` (removing from the heap) and `heappush` (adding to the heap). Other operations will not be covered, but I believe once you understand these two core operations, the rest should not be difficult.
 
-实现之后的使用效果大概是这样的：
+The usage after implementation looks something like this:
 
 ```py
 h = min_heap()
@@ -572,139 +573,138 @@ h.heappop() # 1
 h.heappop() # 3
 ```
 
-#### 基本原理
+#### Basic Principle
 
-本质上来说，二叉堆就是一颗特殊的完全二叉树。它的特殊性只体现在一点，那就是**父节点的权值不大于儿子的权值（小顶堆）**。
+Essentially, a binary heap is a special kind of complete binary tree. Its uniqueness lies in one aspect: the value of the parent node is not greater than that of its children (**in a min-heap**).
 
 ![](https://p.ipic.vip/v32zmq.jpg)
-（一个小顶堆）
+(A Min-Heap)
 
-上面这句话需要大家记住，一切的一切都源于上面这句话。
+Remember this point, as everything about binary heaps stems from it.
 
-由于**父节点的权值不大于儿子的权值（小顶堆）**，那么很自然能推导出树的根节点就是最小值。这就起到了堆的**取极值**的作用了。
+Since **the value of the parent node is not greater than that of its children (in a min-heap)**, we can naturally deduce that the root of the tree is the minimum value. This fulfills the heap's function of **finding extreme values**.
 
-那动态性呢？二叉堆是怎么做到的呢？
+But what about the dynamic aspect? How does a binary heap achieve this?
 
-##### 出堆
+##### Removing from the Heap (heappop)
 
-假如，我将树的根节点出堆，那么根节点不就空缺了么？我应该将第二小的顶替上去。怎么顶替上去呢？一切的一切还是那句话**父节点的权值不大于儿子的权值（小顶堆）**。
+Suppose we remove the root node from the heap. This leaves an empty spot at the root. The second smallest item should replace it. But how? It all comes back to the principle: **the value of the parent node is not greater than that of its children (in a min-heap).**
 
-如果仅仅是删除，那么一个堆就会变成两个堆了，问题变复杂了。
+If we only remove the root node, then one heap would split into two, complicating the problem.
 
 ![](https://p.ipic.vip/ypzpn9.jpg)
-（上图出堆之后会生成两个新的堆）
+(After removing the root node, two new heaps are formed)
 
-一个常见的操作是，把根结点和最后一个结点交换。但是新的根结点可能不满足 **父节点的权值不大于儿子的权值（小顶堆）**。
+A common operation is to swap the root node with the last node. However, the new root node may not satisfy the heap property **where the parent node's value is not greater than its children's values (min-heap).**
 
-如下图，我们将根节点的 2 和尾部的数字进行交换后，这个时候是不满足堆性质的。
+As shown in the following image, after swapping the root node's value (2) with the value at the tail, the heap property is no longer satisfied.
 
 ![](https://p.ipic.vip/gi2ofs.jpg)
 
-这个时候，其实只需要将新的根节点下沉到正确位置即可。这里的**正确位置**，指的还是那句话**父节点的权值不大于儿子的权值（小顶堆）**。如果不满足这一点，我们就继续下沉，直到满足。
+At this point, we only need to sink the new root node down to the correct position. The **correct position** still aligns with the principle that **the parent node's value is not greater than its children's values (min-heap)**. If this condition is not met, we continue to sink the node down until it is satisfied.
 
-我们知道根节点往下下沉的过程，其实有两个方向可供选择，是下沉到左子节点？还是下沉到右子节点？以小顶堆来说，答案应该是下沉到较小的子节点处，否则会错失正确答案。以上面的堆为例，如果下沉到右子节点 4，那么就无法得到正确的堆顶 3。因此我们需要下沉到左子节点。
+When sinking the root node, there are two possible directions: sink to the left child or the right child? For a min-heap, the answer should be to sink to the smaller child, otherwise, the correct heap structure might be missed. For instance, in the heap above, if we sink to the right child (4), the correct heap top (3) cannot be achieved. Therefore, we need to sink to the left child.
 
 ![](https://p.ipic.vip/gqm5d9.jpg)
 
-下沉到如图位置，还是不满足 **父节点的权值不大于儿子的权值（小顶堆）**，于是我们继续执行同样的操作。
+Even after sinking to the position shown in the image, the heap property is not satisfied, so we continue with the same operation.
 
 ![](https://p.ipic.vip/ar3ty6.jpg)
 
-有的同学可能有疑问。弹出根节点前堆满足堆的性质，但是弹出之后经过你上面讲的下沉操作，一定还满足么？
+Some might wonder if, after popping the root node and performing the sinking operations described above, the heap still satisfies its properties?
 
-答案是肯定的。这个也不难理解。由于最后的叶子节点被提到了根节点，它其实最终在哪是不确定的，但是经过上面的操作，我们可以看出：
+The answer is yes. This is not hard to understand. Since the last leaf node has been moved to the root, its eventual position is uncertain, but from the operations above, we can see:
 
-- 其下沉路径上的节点一定都满足堆的性质。
-- 不在下沉路径上的节点都保持了堆之前的相对关系，因此也满足堆的性质。
+- The nodes along its sinking path certainly satisfy the heap property.
+- Nodes not on the sinking path retain their relative positions from before the root was removed, so they also satisfy the heap property.
 
-因此**弹出根节点后，经过上面的下沉操作一定仍然满足堆的性质**。
+Therefore, **after popping the root node and performing the sinking operations, the heap still satisfies its properties.**
 
-时间复杂度方面可以证明，下沉和树的高度成正相关，因此时间复杂度为 $O(h)$，其中 h 为树高。而由于二叉堆是一颗完全二叉树，因此树高大约是 $logN$，其中 N 为树中的节点个数。
+In terms of time complexity, it can be shown that sinking is directly proportional to the tree's height, so the time complexity is $O(h)$， where ℎ is the tree height. Since a binary heap is a complete binary tree, the tree height is approximately $logN$，where $N$ is the number of nodes in the tree.
+##### Adding to the Heap (heappush)
 
-##### 入堆
+Adding to the heap is similar to removing from it. We can directly insert a new node at the end of the tree. Similar to before, this operation may also disrupt the heap property.
 
-入堆和出堆类似。我们可以直接往树的最后插入一个节点。和上面类似，这样的操作同样可能会破坏堆的性质。
-
-> 之所以这么做的其中一个原因是时间复杂度更低，因为我们是用数组进行模拟的，而在数组尾部添加元素的时间复杂度为 $O(1)$。
+> One reason for doing this is that it has a lower time complexity, as we are simulating with an array and adding elements to the end of an array has a time complexity of $O(1)$。
 
 ![](https://p.ipic.vip/usffec.jpg)
 
-这次我们发现，不满足堆的节点目前是刚刚被插入节点的尾部节点，因此不能进行下沉操作了。这一次我们需要执行**上浮操作**。
+In this case, the node that does not satisfy the heap property is the recently inserted tail node, so we cannot perform a sinking operation. Instead, we need to do an **upward floating (swim) operation.**
 
-> 叶子节点是只能上浮的（根节点只能下沉，其他节点既可以下沉，又可以上浮）
+> Leaf nodes can only float upwards (the root node can only sink down, while other nodes can either sink or float).
 
-和上面基本类似，如果不满足堆的性质，我们将其和父节点交换（上浮），继续这个过程，直到满足堆的性质。
+Similar to the sinking process, if the heap property is not satisfied, we swap it with its parent node (floating upwards), and continue this process until the heap property is satisfied.
 
 ![](https://p.ipic.vip/r0vogx.jpg)
-(第一次上浮，仍然不满足堆特性，继续上浮)
+(First float upwards, still not satisfying heap property, continue floating)
 
 ![](https://p.ipic.vip/arunjx.jpg)
-（满足了堆特性，上浮过程完毕）
+(Satisfies the heap property, floating process completed)
 
-经过这样的操作，其还是一个满足堆性质的堆。证明过程和上面类似，不再赘述。
+After such operations, it still forms a heap that satisfies the heap property. The proof process is similar to above and will not be repeated.
 
-需要注意的是，由于上浮**只需要拿当前节点和父节点进行比对就可以了，** 由于省去了判断左右子节点哪个更小的过程，因此更加简单。
+Note that since floating **only requires comparing the current node with its parent**, and omits the process of determining which child node is smaller, it is simpler.
 
-#### 实现
+#### Implementation
 
-对于完全二叉树来说使用数组实现非常方便。因为：
+For complete binary trees, using an array for implementation is very convenient because:
 
-- 如果节点在数组中的下标为 i，那么其左子节点下标为 $2 \times i$，右节点为 $2 \times i$+1。
-- 如果节点在数组中的下标为 i，那么父节点下标为 i//2（地板除）。
+- If a node's index in the array is i，then its left child's index is $2 \times i$，and the right child's index is $2 \times i$+1。
+- If a node's index in the array is i, then its parent's index is i//2（floor division）。
 
-当然这要求你的**数组从 1 开始存储数据**。如果不是，上面的公式其实微调一下也可以达到同样的效果。不过这是一种业界习惯，我们还是和业界保持一致比较好。从 1 开始存储的另外一个好处是，我们可以将索引为 0 的位置空出来存储诸如**堆大小**的信息，这是一些大学教材里的做法，大家作为了解即可。
+This requires that **the array starts storing data from index 1**. If not, the formulas can be slightly adjusted to achieve the same effect. However, this is an industry convention, and it's better to stay consistent with the industry. Another advantage of starting from 1 is that we can leave the index 0 position empty to store information like **the size of the heap**, which is a practice in some university textbooks.
 
-如图所示是一个完全二叉树和树的数组表示法。
+The following image shows a complete binary tree and its array representation.
 
 ![](https://p.ipic.vip/npka2q.jpg)
-（注意数组索引的对应关系）
+(Note the correspondence between array indices)
 
-形象点来看，我们可以可以画出如下的对应关系图：
+To visualize it, we can draw the following correspondence diagram:
 
 ![](https://p.ipic.vip/an63qu.jpg)
 
-这样一来，是不是和上面的树差不多一致了？有没有容易理解一点呢？
+With this, doesn't it look quite similar to the tree above? Is it easier to understand?
 
-上面已经讲了上浮和下沉的过程。刚才也讲了父子节点坐标的关系。那么代码就呼之欲出了。我们来下最核心的**上浮**和**下沉**的代码实现吧。
+Having explained the floating and sinking processes, and the relationship between parent and child node indices, the code implementation becomes quite clear. Let's look at the core **floating** and **sinking** code implementation.
 
-伪代码：
+Pseudocode：
 
 ```java
-// x 是要上浮的元素，从树的底部开始上浮
+// x is the element to float up, starting from the bottom of the tree
 private void shift_up(int x) {
   while (x > 1 && h[x] > h[x / 2]) {
-    //  swqp 就是交换数组两个位置的值
+    // swap exchanges the values of two positions in the array
     swap(h[x], h[x / 2]);
     x /= 2;
   }
 }
-// x 是要下沉的元素，从树的顶部开始下沉
+// x is the element to sink down, starting from the top of the tree
 private void shift_down(int x) {
   while (x * 2 <= n) {
-    // minChild 是获取更小的子节点的索引并返回
-    mc = minChild(x);
-    if (h[mc] <= h[x]) break;
+    // minChild returns the index of the smaller child node
+    int mc = minChild(x);
+    if (h[mc] >= h[x]) break;
     swap(h[x], h[mc]);
     x = mc;
   }
 }
 ```
 
-这里 Java 语言为例，讲述一下代码的编写。其他语言的二叉堆实现可以去我的**刷题插件 leetcode-cheatsheet** 中获取。插件的获取方式在公众号**力扣加加**里，回复插件即可。
+Here is an example using Java to discuss the code writing. Implementations of binary heaps in other languages can be found in my **LeetCode Cheatsheet plugin**. You can obtain the plugin by responding to the **LeetCode Plus Plus** public account and asking for the plugin.
 
 ```java
 import java.util.Arrays;
 import java.util.Comparator;
 
 /**
- * 用完全二叉树来构建 堆
- * 前置条件 起点为 1
- * 那么 子节点为  i <<1 和 i<<1 + 1
- * 核心方法为
- * shiftdown 交换下沉
- * shiftup 交换上浮
- * <p>
- * build 构建堆
+ * Constructing a heap using a complete binary tree
+ * Prerequisite: starting from 1
+ * Then, the child nodes are i <<1 and i<<1 + 1
+ * Core methods are:
+ * shiftdown - swapping and sinking
+ * shiftup - swapping and floating
+ * 
+ * build - building the heap
  */
 
 public class Heap {
@@ -733,7 +733,7 @@ public class Heap {
 
         while ((i << 1) <= size) {
             int child = i << 1;
-            // child!=size 判断当前元素是否包含右节点
+            // child!=size checks if the current element has a right node
             if (child != size && queue[child + 1] < queue[child]) {
                 child++;
             }
@@ -806,33 +806,33 @@ public class Heap {
 
 ```
 
-#### 小结
+#### Summary
 
-堆的实现有很多。比如基于链表的跳表，基于数组的二叉堆和基于红黑树的实现等。这里我们详细地讲述了二叉堆的实现，不仅是其实现简单，而且其在很多情况下表现都不错，推荐大家重点掌握二叉堆实现。
+There are many implementations of heaps, such as Skip Lists based on linked lists, Binary Heaps based on arrays, and implementations based on Red-Black Trees, among others. Here, we have detailed the implementation of Binary Heaps, not only because of their simplicity but also because they perform well in many situations, making them highly recommended for thorough understanding.
 
-对于二叉堆的实现，核心点就一点，那就是始终维护堆的性质不变，具体是什么性质呢？那就是 **父节点的权值不大于儿子的权值（小顶堆）**。为了达到这个目的，我们需要在入堆和出堆的时候，使用上浮和下沉操作，并恰当地完成元素交换。具体来说就是上浮过程和比它大的父节点进行交换，下沉过程和两个子节点中较小的进行交换，当然前提是它有子节点且子节点比它小。
+The core principle of implementing a Binary Heap is to always maintain the heap's properties, which are **the parent node's value is not greater than its children's values (in a min-heap)**. To achieve this, we use floating and sinking operations during heap insertion and removal, appropriately swapping elements. Specifically, during the floating process, we swap with the larger parent node, and during the sinking process, we swap with the smaller of the two child nodes, assuming they exist and are smaller than the node being sunk.
 
-关于堆化我们并没有做详细分析。不过如果你理解了本文的入堆操作，这其实很容易。因此堆化本身就是一个不断入堆的过程，只不过**将时间上的离散的操作变成了一次性操作**而已。
+Heapification was not analyzed in detail here. However, if you understand the heap insertion operation discussed in this article, heapification is quite straightforward. Essentially, heapification is a process of continuously adding to the heap, but **turning discrete operations over time into a one-time operation.**
 
-## 预告
+## Preview
 
-本文预计分两个部分发布。这是第一部分，后面的内容更加干货，分别是**三个技巧**和**四大应用**。
+This article is planned to be published in two parts. This is the first part. The content to follow is even more substantial, covering** Three Techniques** and **Four Major Applications**.
 
-- 三个技巧
+- Three Techniques
 
-1. 多路归并
-2. 固定堆
-3. 事后小诸葛
+1. Fixed Heap
+2. Multi-way Merge
+3. Post-facto Zhuge Liang (strategy based on hindsight)
 
-- 四大应用
+- Four Major Applications
 
-1. topK
-2. 带权最短距离
-3. 因子分解
-4. 堆排序
+1. Top K
+2. Weighted Shortest Distance
+3. Factor Decomposition
+4. Heap Sort
 
-这两个主题是专门教你怎么解题的。掌握了它，力扣中的大多数堆的题目都不在话下（当然我指的仅仅是题目中涉及到堆的部分）。
+These topics are specifically designed to teach you how to solve problems. Mastering them will make most of the heap-related problems on LeetCode a piece of cake (of course, I'm only referring to the parts of the problems that involve heaps).
 
-大家对此有何看法，欢迎给我留言，我有时间都会一一查看回答。更多算法套路可以访问我的 LeetCode 题解仓库：https://github.com/azl397985856/leetcode 。目前已经 37K star 啦。大家也可以关注我的公众号《力扣加加》带你啃下算法这块硬骨头。
+I welcome your opinions and feedback, which I will check and respond to when I have time. For more algorithmic patterns and solutions, you can visit my LeetCode solution repository: https://github.com/azl397985856/leetcode. It currently has over 37K stars. You can also follow my public account "LeetCode Plus Plus" to tackle the tough nut of algorithms.
 
-![二维码](https://p.ipic.vip/e910pi.jpg)
+https://p.ipic.vip/e910pi.jpg
