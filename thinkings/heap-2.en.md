@@ -201,7 +201,7 @@ class MedianFinder:
 
 ##### Problem Description
 
-```
+```py
 There are N workers. The quality of work of the i-th worker is quality[i], and their minimum expected wage is wage[i].
 
 Now, we want to hire K workers to form a wage group. When hiring a group of K workers, we must pay them according to the following rules:
@@ -315,7 +315,7 @@ Here, I have carefully prepared four hard-level problems for you. Mastering this
 
 ##### Problem Description
 
-```
+```py
 You are given an m * n matrix mat, and an integer k. Each row of the matrix is sorted in non-decreasing order.
 
 You can select 1 element from each row to form an array. Return the k-th smallest array sum among all possible arrays.
@@ -393,7 +393,7 @@ So how should the code be written?
 
 As mentioned above, we first need to initialize m pointers and set them to 0. Corresponding pseudocode:
 
-```
+```py
 # Initialize the heap
 h = []
 # sum(vec[0] for vec in mat) is the sum of the first items in m one-dimensional arrays
@@ -405,7 +405,7 @@ heapq.heappush(h, cur)
 ```
 Next, we move one pointer each time, thereby branching out into a new direction. Each time we pop the smallest element from the heap, and after k pops, we get the k-th smallest element. Pseudocode:
 
-```
+```py
 for 1 to K:
     # acc is the current sum, pointers represents the state of the pointers.
     acc, pointers = heapq.heappop(h)
@@ -429,6 +429,153 @@ The above pseudocode has a potential issue. For example, consider two one-dimens
 One possible solution is to use a hashset to record all pointer states, thus avoiding the same pointer configuration being calculated multiple times. To do this, we need to make a slight adjustment in how we use the pointers array, namely, using tuples instead of arrays. The reason is that arrays cannot be hashed directly. For more details, please refer to the code section.
 
 The problems involving **Multi-way Merge** typically have similar thought processes and codes. To better understand the subsequent problems, it's crucial to grasp this problem thoroughly, as we will not analyze subsequent problems in such detail.
+
+```py
+class Solution:
+    def kthSmallest(self, mat, k: int) -> int:
+        h = []
+        cur = (sum(vec[0] for vec in mat), tuple([0] * len(mat)))
+        heapq.heappush(h, cur)
+        seen = set(cur)
+
+        for _ in range(k):
+            acc, pointers = heapq.heappop(h)
+            for i, pointer in enumerate(pointers):
+                if pointer != len(mat[0]) - 1:
+                    t = list(pointers)
+                    t[i] = pointer + 1
+                    tt = tuple(t)
+                    if tt not in seen:
+                        seen.add(tt)
+                        heapq.heappush(h, (acc + mat[i][pointer + 1] - mat[i][pointer], tt))
+        return acc
+```
+(Section 1.3.4)
+
+#### 719. Find the K-th Smallest Pair Distance
+
+##### Problem Description
+```py
+Given an integer array, return the k-th smallest distance among all the pairs. The distance between a pair (A, B) is defined as the absolute difference between A and B.
+
+Example 1:
+
+Input:
+nums = [1,3,1]
+k = 1
+Output: 0
+Explanation:
+All the pairs are as follows:
+(1,3) -> 2
+(1,1) -> 0
+(3,1) -> 2
+Therefore, the 1st smallest pair distance is (1,1), with a distance of 0.
+Hints:
+
+2 <= len(nums) <= 10000.
+0 <= nums[i] < 1000000.
+1 <= k <= len(nums) * (len(nums) - 1) / 2.
+```
+##### Idea
+It's evident that there could be a total of $C_n^2$, or $n\times(n-1)\div2$, possible pairs.
+
+Hence, we could use two loops to find all pairs and sort them in ascending order, then take the k-th element.
+
+In fact, we can use the fixed heap technique, maintaining a max heap of size k, so that the top element of the heap is the k-th smallest. This has already been discussed in the section about fixed heaps and won't be elaborated on here.
+
+```py
+class Solution:
+    def smallestDistancePair(self, nums: List[int], k: int) -> int:
+        h = []
+        for i in range(len(nums)):
+            for j in range(i + 1, len(nums)):
+                a, b = nums[i], nums[j]
+                # Keep the heap size no larger than k
+                if len(h) == k and -abs(a - b) > h[0]:
+                    heapq.heappop(h)
+                if len(h) < k:
+                    heapq.heappush(h, -abs(a - b))
+
+        return -h[0]
+```
+(Section 1.3.5)
+
+However, this optimization is not very significant because the bottleneck of the algorithm lies in the $N^2$ part of the enumeration. We should try to optimize this aspect.
+
+If we sort the pairs, the smallest pair distance will definitely be among nums[i] - nums[i - 1], where i is an integer from 1 to n, depending on which one is smaller. We can then use the multi-way merge approach mentioned above to solve it.
+
+If the difference nums[i] - nums[i - 1] is the smallest, then the 2nd smallest will definitely be among the n - 1 remaining situations and the new situation resulting from the split of nums[i] - nums[i - 1]. The method of splitting is similar to the above; we only need to move the pointer at i to i + 1. Here, the length of the pointers array is fixed at 2, unlike the m in the previous problem. Here, I named the two pointers as fr and to, representing from and to, respectively.
+
+##### Code
+
+```py
+class Solution(object):
+    def smallestDistancePair(self, nums, k):
+        nums.sort()
+        # n candidate answers
+        h = [(nums[i+1] - nums[i], i, i+1) for i in range(len(nums) - 1)]
+        heapq.heapify(h)
+
+        for _ in range(k):
+            diff, fr, to = heapq.heappop(h)
+            if to + 1 < len(nums):
+                heapq.heappush((nums[to + 1] - nums[fr], fr, to + 1))
+
+        return diff
+
+```
+(Section 1.3.6)
+
+Since the time complexity is related to k, and k could potentially reach the magnitude of $N^2$, this method might also time out. **However, this proves the correctness of this approach, and it might be useful if the problem is slightly modified.**
+
+This problem can be solved through binary search, which deviates a bit from the heap topic, so I'll only briefly mention it here.
+
+When looking for the k-th smallest number, heaps and binary search often come to mind. Binary search is considered because finding the k-th smallest essentially means finding a number that has k - 1 numbers not greater than itself. This problem often satisfies monotonicity, therefore binary search can be used to solve it.
+
+For this problem, the largest pair difference is the maximum value of the array minus the minimum value, let's call it max_diff. We can ask questions like:
+
+- How many pairs have a difference less than max_diff?
+- How many pairs have a difference less than max_diff - 1?
+- How many pairs have a difference less than max_diff - 2?
+- How many pairs have a difference less than max_diff - 3?
+- How many pairs have a difference less than max_diff - 4?
+...
+
+We know that the answers to these questions are not strictly decreasing, so binary search should be considered. We keep asking questions until we find that there are **k - 1 pairs with a difference less than x**. However, this method has issues. The reasons are two-fold:
+
+1. There might be more than one number that has k - 1 pairs less than it.
+2. We can't be sure that a number with k - 1 pairs less than it definitely exists. For example, if the pair differences are [1,1,1,1,2], and you are asked to find the 3rd largest, then a number with exactly two pairs less than it does not exist.
+
+Our approach can be adjusted to find less than or equal to x with k pairs, and then we can use the leftmost template of binary search to solve it. For more about the leftmost template, you can refer to my [binary search topic](https://github.com/azl397985856/leetcode/blob/master/91/binary-search.md)
+
+##### Code:
+```py
+class Solution:
+    def smallestDistancePair(self, A: List[int], K: int) -> int:
+        A.sort()
+        l, r = 0, A[-1] - A[0]
+
+        def count_ngt(mid):
+            slow = 0
+            ans = 0
+            for fast in range(len(A)):
+                while A[fast] - A[slow] > mid:
+                    slow += 1
+                ans += fast - slow
+            return ans
+
+        while l <= r:
+            mid = (l + r) // 2
+            if count_ngt(mid) >= K:
+                r = mid - 1
+            else:
+                l = mid + 1
+        return l
+```
+
+
+
+
 
 
 
