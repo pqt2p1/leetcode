@@ -24,9 +24,11 @@ Hello everyone, I am Lucifer. Today, I bring you a special topic on "Heaps". Fir
 
 This series includes the following topics:
 
--[I have almost finished swiping all the linked topics of Lixu, and I found these things. 。 。 ](https://lucifer.ren/blog/2020/11/08/linked-list/) 
--[After almost brushing all the tree questions of Li Buckle, I found these things. 。 。 ](https://lucifer.ren/blog/2020/11/23/tree/) 
--[After almost brushing all the piles of questions, I found these things. 。 。 (First bullet)](https://lucifer.ren/blog/2020/12/26/heap/)
+- [I have almost finished swiping all the linked topics of Lixu, and I found these things. 。 。 ](https://lucifer.ren/blog/2020/11/08/linked-list/)
+
+- [After almost brushing all the tree questions of Li Buckle, I found these things. 。 。 ](https://lucifer.ren/blog/2020/11/23/tree/) 
+
+- [After almost brushing all the piles of questions, I found these things. 。 。 (First bullet)](https://lucifer.ren/blog/2020/12/26/heap/)
 
 <! -- more -->
 
@@ -351,7 +353,7 @@ n == mat.length[i]
 mat[i] is a non-decreasing array
 ```
 
-##### Idea
+#### Idea
 
 This problem essentially gives you m one-dimensional arrays of equal length, and asks you to select one number from each of these m arrays, i.e., a total of m numbers, to find the sum that is the k-th smallest among **all possible selections**.
 
@@ -476,7 +478,7 @@ Hints:
 0 <= nums[i] < 1000000.
 1 <= k <= len(nums) * (len(nums) - 1) / 2.
 ```
-##### Idea
+#### Idea
 It's evident that there could be a total of $C_n^2$, or $n\times(n-1)\div2$, possible pairs.
 
 Hence, we could use two loops to find all pairs and sort them in ascending order, then take the k-th element.
