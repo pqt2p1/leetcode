@@ -399,14 +399,14 @@ However, there are two main issues with this approach:
 By understanding the definition of ugly numbers, we know that a super ugly number can definitely be written in the following form.
 
 ```
-if primes = [a,b,c,....]
+if primes = [a, b, c, ...]
 then f(ugly) = a * x1 * b * x2 * c * x3 ...
-其中 x1，x2，x3 均为正整数。
+where x1, x2, x3 are positive integers.
 ```
 
-不妨将问题先做一下简化处理。考虑题目给的例子：[2,7,13,19]。
+Let's simplify the problem for a moment, considering the given example: [2,7,13,19].
 
-我们可以使用四个指针来处理。直接看下代码吧：
+We can handle this with four pointers. Let's look at the code:
 
 ```java
 public class Solution {
