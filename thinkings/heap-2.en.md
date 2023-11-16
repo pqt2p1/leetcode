@@ -1,62 +1,62 @@
-# I have almost finished brushing all the piles of questions, and I found these things. 。 。 (Second bullet)
+# I've Nearly Completed All the Heap Problems on LeetCode, and Here's What I Discovered... (Part Two)
 
-## A little digression
+## A Little Aside
 
-Last time I did a small survey for everyone on my public account, "Vote for the programming language you want to solve~". The following are the results of the survey：
+Last time, I conducted a small survey on my WeChat public account, "Vote for the Programming Language You Want in Solutions". Here are the results:
 
 ![Voting results](https://p.ipic.vip/j4yrg2.jpg)
 
-Regarding others, most of them are in the Go language.
+Regarding other languages, most votes were for Go.
 
 ![What did the other people who voted for write?](https://p.ipic.vip/fe8utj.jpg)
 
-Since the proportion of Java and Python has exceeded 60%, this time I will try to write in both Java and Python. Thank you @ CaptainZ for providing the Java code. At the same time, in order to prevent the article from being stinky and long, I put all the code (Java and Python) of this article in Java on the official website of Likujiajia\*\*, website address:https://leetcode-solution.cn/solution-code
+Since Java and Python accounted for over 60% of the preference, this time I'll try writing in both Java and Python, thanks to @CaptainZ for the Java code. To avoid making the article too long and tedious, I've placed all the code (both Java and Python) on the official LeetCode Plus website, available at: https://leetcode-solution.cn/solution-code
 
-> If you don't surf the Internet scientifically, it may be very slow to open.
+> If you're not using a VPN, the website might open slowly.
 
-## Body
+## Main Content
 
 ![](https://p.ipic.vip/4r5oeh.jpg)
 
-Hello everyone, this is lucifer. What I bring to you today is the topic of "Heap". Let's start with the outline of this article. This is a brain map drawn by me with mindmap. After that, I will continue to improve it and gradually improve other topics.
+Hello everyone, I am Lucifer. Today, I bring you a special topic on "Heaps". First, let's look at the outline of this article, which I created using a mindmap. I will continue to refine it, gradually completing other topics.
 
-> You can also use vscode blink-mind to open the source file to view. There are some notes in it that you can click to view. The source file can be obtained by replying to the brain map on my official account "Force Buckle Plus", and the brain map will continue to be updated with more content in the future. vscode plug-in address:https://marketplace.visualstudio.com/items?itemName=awehook.vscode-blink-mind
+> You can also open the source file in vscode blink-mind to view it, which includes some notes. The source file can be obtained from my WeChat public account "LeetCode Plus" by replying with "mindmap". I'll keep updating the mindmap with more content. vscode plugin link: https://marketplace.visualstudio.com/items?itemName=awehook.vscode-blink-mind
 
-This series contains the following topics：
+This series includes the following topics:
 
 -[I have almost finished swiping all the linked topics of Lixu, and I found these things. 。 。 ](https://lucifer. ren/blog/2020/11/08/linked-list/) -[After almost brushing all the tree questions of Li Buckle, I found these things. 。 。 ](https://lucifer. ren/blog/2020/11/23/tree/) -[After almost brushing all the piles of questions, I found these things. 。 。 (First bullet)](https://lucifer . ren/blog/2020/12/26/heap/)
 
 <! -- more -->
 
-This time it is the next article. Students who have not read the previous article strongly recommend reading the previous article first. [After almost brushing all the piles of questions, I found these things. 。 。 (First bullet)](https://lucifer . ren/blog/2020/12/26/heap/)
+This is the second part. If you haven't read the first part, I strongly recommend reading it. [After almost brushing all the piles of questions, I found these things. 。 。 (First bullet)](https://lucifer . ren/blog/2020/12/26/heap/)
 
-This is the second part, and the content later is more dry goods, namely **Three techniques** and **Four major applications**. These two topics are dedicated to teaching you how to solve problems. After mastering it, most of the heap topics in Lixu are not a cinch (of course, I only refer to the part of the heap that is involved in the topic).
+This second part contains even more practical content, specifically Three Techniques and Four Major Applications. These topics are specifically designed to teach you how to solve problems. Mastering them means most heap-related problems on LeetCode will be within your grasp (of course, I'm only referring to the heap aspect of the problems).
 
-Warning: The topics in this chapter are basically of hard difficulty. This is because many of the topics in this chapter are not difficult to mark. This point has also been introduced earlier.
+Warning: The problems in this chapter are mostly marked as hard on LeetCode, which is common for heap problems, as I've mentioned before.
 
-## A little explanation
+## A Brief Explanation
 
-Before serving the main course, I will give you an appetizer.
+Before we dive into the main course, let's have an appetizer.
 
-Here are two concepts to introduce to you, namely **tuple** and **Simulation big top heap**. The reason for these instructions is to prevent everyone from not understanding them later.
+I'd like to introduce two concepts here: **Tuples** and **Simulating a Max Heap**. These are to ensure you won't be lost later on.
 
 ### Tuple
 
-Using the heap, you can not only store a single value. For example, 1, 2, 3, and 4 of [1, 2, 3, 4] are all single values. In addition to single values, composite values, such as objects or tuples, can also be stored.
+Using heaps isn't limited to storing single values, like the 1, 2, 3, 4 in [1,2,3,4]. In addition to single values, you can also store composite values, like objects or tuples.
 
-Here we introduce a way to store tuples. This technique will be widely used later. Please be sure to master it. For example [(1,2,3), (4,5,6), (2,1,3),(4,2,8)]。
+Here, we'll talk about storing tuples, a technique that will be widely used later on. Please make sure to understand it. For example, [(1,2,3), (4,5,6), (2,1,3),(4,2,8)].
 
 ```py
 h = [(1,2,3), (4,5,6), (2,1,3),(4,2,8)]
-heapq. heappify(h) # heappify(small top heap)
+heapq.heappify(h) # Turn into a min-heap
 
-heapq. heappop() #Pop up(1,2,3)
-heapq. heappop() #Pop up(2,1,3)
-heapq. heappop() #Pop up(4,2,8)
-heapq. heappop() #Pop up(4,5,6)
+heapq.heappop() # Pops out (1,2,3)
+heapq.heappop() # Pops out (2,1,3)
+heapq.heappop() # Pops out (4,2,8)
+heapq.heappop() # Pops out (4,5,6)
 ```
 
-Using a diagram to represent the heap structure is as follows：
+The heap structure with tuples would look like this:
 
 ![Use a small top heap of tuples](https://p.ipic.vip/wioiow.jpg)
 
