@@ -24,11 +24,13 @@ Hello everyone, I am Lucifer. Today, I bring you a special topic on "Heaps". Fir
 
 This series includes the following topics:
 
--[I have almost finished swiping all the linked topics of Lixu, and I found these things. 。 。 ](https://lucifer. ren/blog/2020/11/08/linked-list/) -[After almost brushing all the tree questions of Li Buckle, I found these things. 。 。 ](https://lucifer. ren/blog/2020/11/23/tree/) -[After almost brushing all the piles of questions, I found these things. 。 。 (First bullet)](https://lucifer . ren/blog/2020/12/26/heap/)
+-[I have almost finished swiping all the linked topics of Lixu, and I found these things. 。 。 ](https://lucifer.ren/blog/2020/11/08/linked-list/) 
+-[After almost brushing all the tree questions of Li Buckle, I found these things. 。 。 ](https://lucifer.ren/blog/2020/11/23/tree/) 
+-[After almost brushing all the piles of questions, I found these things. 。 。 (First bullet)](https://lucifer.ren/blog/2020/12/26/heap/)
 
 <! -- more -->
 
-This is the second part. If you haven't read the first part, I strongly recommend reading it. [After almost brushing all the piles of questions, I found these things. 。 。 (First bullet)](https://lucifer . ren/blog/2020/12/26/heap/)
+This is the second part. If you haven't read the first part, I strongly recommend reading it. [After almost brushing all the piles of questions, I found these things. 。 。 (First bullet)](https://lucifer.ren/blog/2020/12/26/heap/)
 
 This second part contains even more practical content, specifically Three Techniques and Four Major Applications. These topics are specifically designed to teach you how to solve problems. Mastering them means most heap-related problems on LeetCode will be within your grasp (of course, I'm only referring to the heap aspect of the problems).
 
@@ -60,27 +62,27 @@ The heap structure with tuples would look like this:
 
 ![Use a small top heap of tuples](https://p.ipic.vip/wioiow.jpg)
 
-Briefly explain the execution result of the above code.
+A simple explanation of the above code:
 
-Using tuples, the first value of the tuple is compared as a key by default. If the first one is the same, continue to compare the second one. For example, the above (4,5,6) and (4,2,8), since the first value is the same, continue to compare the latter one, and because 5 is larger than 2, (4,2,8) comes out of the heap first.
+Using tuples, the first element of the tuple is taken as the key for comparison. If the first elements are the same, the second ones are compared. For example, (4,5,6) and (4,2,8) have the same first element, so we compare the second elements. Since 5 is greater than 2, (4,2,8) comes out of the heap first.
 
-Using this technique has two effects：
+This technique has two uses:
 
-1. Carry some additional information. For example, if I want to find the kth decimal number in a two-dimensional matrix, of course, the value is used as the key. However, the processing process also needs to use its row and column information, so it is appropriate to use tuples, such as (val, row, col).
+1. To carry additional information. For example, if you want to find the k-th smallest number in a two-dimensional matrix, you would use the value as the key. But if you need row and column information during the process, tuples like (val, row, col) are suitable.
 
-2. I want to sort according to two keys, one primary key and one secondary key. There are two typical usages here，
+2. To sort based on two keys, a primary and a secondary key. There are typically two ways to do this:
 
-2.1 One is that both are in the same order, for example, both are in order or both are in reverse order.
+    2.1. Both keys are sorted in the same order, either ascending or descending.
 
-2.2 The other is to sort in two different orders, that is, one is in reverse order and the other is in order.
+    2.2. The two keys are sorted in different orders, one in ascending and the other in descending.
 
-Due to the length of the question, the details will not be discussed here. You can pay attention to it during the usual question-making process. If you have the opportunity, I will open a separate article to explain.
+Due to the length of the question, the details will not be discussed here. Pay attention to these techniques while practicing, and I might write a separate article explaining them in detail.
 
-> If the programming language you are using does not have a heap or the implementation of the heap does not support tuples, then you can also make it support by simple transformation, mainly by customizing the comparison logic.
+> If your programming language does not support heaps or tuples, you can still enable this by customizing the comparison logic.
 
-### Simulate the big top pile
+### Simulating a Max Heap
 
-Since Python does not have a big top heap. Therefore, I used a small top heap for simulation implementation here. I am about to take all the original numbers to the opposite number. For example, if the original number is 5, -5 will be added to the pile. After this treatment, the small top pile can be used as a large top pile. However, it should be noted that when you pop it out, \*\* Remember to reverse it and restore it back.
+Since Python doesn't have a built-in max heap, I've used a min heap for simulation. That is, taking the opposite of the original numbers. For example, if the original number is 5, then push -5 into the heap. With this approach, a min heap can be used as a max heap. However, remember to reverse the number when you pop it out.
 
 Code example：
 
@@ -96,42 +98,42 @@ heapq. heappush(h, -a)
 -1 * heapq. heappop(h) # 1
 ```
 
-It is shown in the figure as follows：
+The heap represented graphically would look like this:
 
 ![Small top pile simulates big top pile](https://p.ipic.vip/226haf.jpg)
 
-That's it for laying the groundwork, and then we will get to the point.
+That's all for the introduction, now let's get to the main content.
 
-## Three skills
+## Three Techniques
 
-### Technique 1-Fixed Heap
+### Technique One - Fixed Heap
 
-This technique refers to fixing the size of the heap k unchanged, which can be achieved in the code by pushing one in every time one pops out. And since the initial heap may be 0, we just need to push into the heap one by one at the beginning to achieve the size of the heap is k, so strictly speaking, it should be ** To maintain that the size of the heap is not greater than k**.
+This technique refers to keeping the size of the heap, k, constant. In code, this can be achieved by **pushing a new element every time you pop one out**. Since the initial heap might be 0, we need to push elements into the heap to reach a size of k, so it's more about **keeping the heap's size at most k**.
 
-A typical application of a fixed heap is to find the k-th smallest number. In fact, the simplest way to find the kth smallest number is to build a small top heap, put all the numbers into the heap first, and then out of the heap one by one, a total of k times. The last time it came out of the pile was the kth smallest number.
+A typical application of a fixed heap is to find the k-th smallest number. The simplest way to do this is to create a min heap, push all the numbers into the heap, and then pop them out one by one, a total of k times. The last number popped out is the k-th smallest.
 
-However, we don't need to put them all into the heap first, but build a large top heap (note that it is not the small top heap above), and maintain the size of the heap at k. If the size of the heap is greater than k after the new number is added to the heap, you need to compare the number at the top of the heap with the new number, and remove the larger number. This guarantees that the number in the heap is the smallest k of all numbers, and the largest of the smallest k (that is, the top of the heap) is not the kth smallest? This is the reason for choosing to build a large top stack instead of a small top stack.
+However, we can also achieve this without pushing all the numbers in first. Instead, we create a max heap (note, not the min heap mentioned above) and keep the size of the heap to k. If a new number is pushed into the heap and the size exceeds k, the larger number between the top of the heap and the new number should be removed. This ensures that the numbers in the heap are the smallest k numbers of the entire set. And the largest among these smallest k numbers (i.e., the top of the heap) is exactly the k-th smallest, which is why we choose to build a max heap instead of a min heap.
 
 ![Fix the 5th smallest number on the big top stack](https://p.ipic.vip/okcn10.jpg)
 
-The summary in a simple sentence is that \*\* Fixing a large top heap of size k can quickly find the k-th smallest number, on the contrary, fixing a small top heap of size k can quickly find the k-th largest number. For example, the third question of the weekly competition on 2020-02-24 [5663. Find the kth largest XOR coordinate value](https://leetcode-cn.com/problems/find-kth-largest-xor-coordinate-value /"5663. Find out the kth largest XOR coordinate value") You can use the fixed small top heap technique to achieve it (this question allows you to find the kth largest number).
+In short, **a fixed-size k max heap can quickly find the k-th smallest number, and vice versa, a fixed-size k min heap can quickly find the k-th largest number**. For instance, the third problem of the LeetCode weekly contest on 2020-02-24 [5663. Find the kth largest XOR coordinate value](https://leetcode-cn.com/problems/find-kth-largest-xor-coordinate-value) can be solved using this fixed min heap technique (as this problem asks for the k-th largest number).
 
-So maybe your feelings are not strong. Next, I will give you two examples to help you deepen your impression.
+It might not be very clear just yet, so let's look at two examples to help deepen your understanding.
 
 #### 295. The median of the data stream
 
 ##### Title description
 
 ```
-The median is the number in the middle of an ordered list. If the length of the list is even, the median is the average of the two numbers in the middle.
+The median is the middle number in an ordered list. If the length of the list is even, the median is the average of the two middle numbers.
 
-For example，
+For example,
 
-The median of [2,3,4] is 3
+The median of [2,3,4] is 3.
 
-The median of [2,3] is (2 + 3) / 2 = 2.5
+The median of [2,3] is (2 + 3) / 2 = 2.5.
 
-Design a data structure that supports the following two operations：
+Design a data structure that supports the following two operations:
 
 Void addNum (int num)-add an integer from the data stream to the data structure.
 Double findMedian()-returns the median of all current elements.
@@ -144,235 +146,289 @@ addNum(3)
 findMedian() -> 2
 Advanced:
 
-If all the integers in the data stream are in the range of 0 to 100, how would you optimize your algorithm?
+If all integers in the data stream are in the range of 0 to 100, how would you optimize your algorithm?
 If 99% of the integers in the data stream are in the range of 0 to 100, how would you optimize your algorithm?
 ```
 
-##### Idea
+##### Thought Process
 
-This question can actually be seen as a special case of finding the k-th smallest number.
+This problem can actually be seen as a special case of finding the k-th smallest number.
 
--If the length of the list is odd, then k is (n + 1) / 2, and the median is the kth number. For example, n is 5 and k is (5 + 1)/ 2 = 3。 -If the length of the list is even, then k is (n +1) / 2 and (n +1) / 2 + 1, and the median is the average of these two numbers. For example, n is 6, and k is (6 +1)/2 = 3 and (6 + 1) / 2 + 1 = 4。
+- If the list length is odd, then k is (n + 1) / 2, and the median is the k-th number. For example, if n is 5, k is (5 + 1)/ 2 = 3.
 
-Thus we can maintain two fixed heap, fixed stack size is $(n + 1) \div 2$ and $n - (n + 1)\div2$, that is, both the size of the heap**up**a difference of 1, and more specifically that $ 0 <= (n + 1) \div 2 - (n - (n + 1) \div 2) <= 1$。
+- If the list length is even, then k is (n + 1) / 2 and (n + 1) / 2 + 1, and the median is the average of these two numbers. For example, if n is 6, k is (6 + 1)/ 2 = 3 and (6 + 1) / 2 + 1 = 4.
 
-Based on the knowledge mentioned above, we can：
+Therefore, we can maintain two fixed heaps, where the size of each heap is $(n + 1) \div 2$ and $n - (n + 1)\div2$, meaning the sizes of the two heaps differ by at most 1. More specifically, $ 0 <= (n + 1) \div 2 - (n - (n + 1) \div 2) <= 1$。
 
--Build a large top heap and store the smallest number of $(n +1) \div 2$, so that the number at the top of the heap is the smallest number of $(n +1) \div 2$, which is the median in odd cases. -Build a small top heap and store the largest number of n- $(n +1) \div 2$, so that the number at the top of the heap is the largest number of n- $(n +1) \div 2$, combined with the large top heap above, the median of even cases can be obtained.
+Based on the above knowledge, we can:
 
-With such knowledge, all that remains is how to maintain the size of the two heaps.
+- Create a max heap to store the smallest $(n + 1) \div 2$ numbers, so the top of the heap is the $(n + 1) \div 2$-th smallest number, which is the median in the case of an odd number of elements.
+- Create a min heap to store the largest n - $(n + 1) \div 2$ numbers, so the top of the heap is the n - $(n + 1) \div 2$-th largest number. Combined with the max heap, this can be used to find the median in the case of an even number of elements.
 
--If the number of large top piles is smaller than that of small top piles, then transfer the smallest of the small top piles to the large top piles. And since the small top stack maintains the largest number of k, and the large top stack maintains the smallest number of k, the top of the small top stack must be greater than or equal to the top of the large top stack, and the two top stacks are the median of **\***. -If the number of large top piles is 2 more than the number of small top piles, then the largest of the large top piles will be transferred to the small top piles. The reason is the same as above.
+With this knowledge, what remains is just how to maintain the sizes of the two heaps.
 
-At this point, you may have understood why two heaps are built separately, and you need a large top heaps and a small top heaps. The reason for this is as described above.
+- If the max heap has fewer elements than the min heap, then transfer the smallest element from the min heap to the max heap. Since the min heap maintains the largest k numbers and the max heap maintains the smallest k numbers, the top of the min heap is guaranteed to be greater than or equal to the top of the max heap, and these two tops are the median at that time.
+- If the max heap has 2 more elements than the min heap, then transfer the largest element from the max heap to the min heap, for the same reason.
 
-The common application of fixed heaps is more than that. Let's continue to look at a topic.
+By now, you might have understood why two separate heaps are established, and why one is a max heap and the other is a min heap. The reasons are as described above.
+
+The application of fixed heaps is not limited to this; let's continue with another problem.
 
 ##### Code
 
 ```py
 class MedianFinder:
-def __init__(self):
-self. min_heap = []
-self. max_heap = []
-def addNum(self, num: int) -> None:
-if not self. max_heap or num < -self. max_heap[0]:
-heapq. heappush(self. max_heap, -num)
-else:
-heapq. heappush(self. min_heap, num)
-if len(self. max_heap) > len(self. min_heap) + 1:
-heappush(self. min_heap, -heappop(self. max_heap))
-elif len(self. min_heap) > len(self. max_heap):
-heappush(self. max_heap, -heappop(self. min_heap))
-def findMedian(self) -> float:
-if len(self. min_heap) == len(self. max_heap): return (self. min_heap[0] - self. max_heap[0]) / 2
-return -self. max_heap[0]
+    def __init__(self):
+        self.min_heap = []
+        self.max_heap = []
+    def addNum(self, num: int) -> None:
+        if not self.max_heap or num < -self.max_heap[0]:
+            heapq.heappush(self.max_heap, -num)
+        else:
+            heapq.heappush(self.min_heap, num)
+        if len(self.max_heap) > len(self.min_heap) + 1:
+            heappush(self.min_heap, -heappop(self.max_heap))
+        elif len(self.min_heap) > len(self.max_heap):
+            heappush(self.max_heap, -heappop(self.min_heap))
+    def findMedian(self) -> float:
+        if len(self.min_heap) == len(self.max_heap): return (self.min_heap[0] - self.max_heap[0]) / 2
+        return -self.max_heap[0]
 ```
 
 (Code 1.3.1)
 
-#### 857. The lowest cost of hiring K workers
+#### 857. Minimum Cost to Hire K Workers
 
-##### Title description
+##### Problem Description
 
 ```
-There are N workers. The i-th worker's work quality is quality[i], and his minimum expected salary is wage[i].
+There are N workers. The quality of work of the i-th worker is quality[i], and their minimum expected wage is wage[i].
 
-Now we want to hire K workers to form a wage group. When hiring a group of K workers, we must pay them wages in accordance with the following rules：
+Now, we want to hire K workers to form a wage group. When hiring a group of K workers, we must pay them according to the following rules:
 
-For each worker in the wage group, wages shall be paid in proportion to the quality of their work and the quality of other workers in the same group.
-Every worker in the wage group should receive at least their minimum expected salary.
-Return how much it costs to form a salary group that meets the above conditions.
+For each worker in the wage group, they should be paid according to the ratio of their work quality to the work quality of other workers in the group.
+Each worker in the wage group should at least receive their minimum expected wage.
+Return the minimum amount of money required to form a wage group that meets the above conditions.
 
 
 
-Example 1：
+Example 1:
 
 Input: quality = [10,20,5], wage = [70,50,30], K = 2
 Output: 105.00000
-Explanation: We pay 70 to Worker No. 0 and 35 to worker No. 2.
+Explanation: We pay 70 to 0th worker and 35 to 2nd worker.
 Example 2：
 
 Input: quality = [3,1,10,10,1], wage = [4,8,2,2,7], K = 3
 Output: 30.66667
-Explanation: We pay 4 to worker No. 0 and 13.33333 to Worker No. 2 and Worker No. 3 respectively.
+Explanation: We pay 4 to 0th worker, 13.33333 to 2nd and 3rd workers separately.
 
 
-prompt：
+Constraints:
 
 1 <= K <=N<=10000, where N=quality. length = wage. length
 1 <= quality[i] <= 10000
 1 <= wage[i] <= 10000
-Answers with an error of within 10^-5 from the correct answer will be considered correct.
-
+Answers with an error within 10^-5 of the correct answer will be considered correct.
 ```
 
-##### Idea
+##### Thought Process
 
-The topic requires us to choose k individuals to pay wages in proportion to the quality of their work and the quality of work of other workers in the same group, and each worker in the wage group should receive at least their minimum expected salary.
+The problem requires us to select k people, pay wages based on the ratio of their work quality to the work quality of other workers in the group, and ensure that each worker in the wage group receives at least their minimum expected wage.
 
-In other words, the quality of work and salary ratio of k individuals in the same group are a fixed value to make the minimum salary paid. Please understand this sentence first. The following content is based on this premise.
+In other words, for the same group of k people, the ratio of their work quality to wage (q/w) must be a fixed value in order to minimize the total wages paid. Please understand this point first, as the rest of the content is based on this premise.
 
-We might as well set an indicator ** work efficiency**, the value of which is equal to q/W. As mentioned earlier, the q /w of these k people is the same in order to guarantee the minimum salary, and this q /w must be the lowest (short board) of these k people, otherwise there will be people who will not get the minimum expected salary.
+Let's define an index called **work efficiency**, which is the value of **q/w**. As mentioned earlier, for the wages to be minimal, this **q/w** must be the same for these k people and must be the lowest among them (the weakest link), otherwise someone will not receive their minimum expected wage.
 
-So we can write the following code：
+
+Thus, we can write the following code:
 
 ```py
 class Solution:
-def mincostToHireWorkers(self, quality: List[int], wage: List[int], K: int) -> float:
-eff = [(q / w, q, w) for a, b in zip(quality, wage)]
-eff. sort(key=lambda a: -a[0])
-ans = float('inf')
-for i in range(K-1, len(eff)):
-h = []
-k = K - 1
-rate, _, total = eff[i]
-# Find out the k people whose work efficiency is higher than it, and the salary of these k people is as low as possible.
-# Since the work efficiency has been arranged in reverse order, the previous ones are all higher than it, and then you can get the k lowest wages by using the heap.
-for j in range(i):
-heapq. heappush(h, eff[j][1] / rate)
-while k > 0:
-total += heapq. heappop(h)
-k -= 1
-ans = min(ans, total)
-return ans
+    def mincostToHireWorkers(self, quality: List[int], wage: List[int], K: int) -> float:
+        eff = [(q / w, q, w) for q, w in zip(quality, wage)]
+        eff.sort(key=lambda a: -a[0])
+        ans = float('inf')
+        for i in range(K-1, len(eff)):
+            h = []
+            k = K - 1
+            rate, _, total = eff[i]
+            # Find k people with higher work efficiency, and their wages should be as low as possible.
+            # Since we have sorted by work efficiency in descending order, those before are all higher, and then using a heap can give us the k people with the lowest wages.
+            for j in range(i):
+                heapq.heappush(h, eff[j][1] / rate)
+            while k > 0:
+                total += heapq.heappop(h)
+                k -= 1
+            ans = min(ans, total)
+        return ans
 ```
 
 (Code 1.3.2)
 
-This approach pushes a lot every time and pops k times. It does not make good use of the **dynamic** characteristics of the heap, but only takes advantage of its ** extreme value** characteristics.
+This approach involves pushing many numbers and popping k times, which does not effectively utilize the **dynamic** nature of heaps, but only their ability to **find extreme values**.
 
-A better practice is to use the fixed heap technique.
+A better method is to use the **fixed heap technique**.
 
-This question can be thought of from a different perspective. In fact, isn't this question asking us to choose k people, take the lowest work efficiency ratio among them, and calculate the total salary based on this lowest work efficiency, and find the lowest total salary? Therefore, this question can fix a large top pile with a size of K. Through certain operations, it is guaranteed that the top pile is the kth smallest (the operation is similar to the previous question).
+This problem can be considered from a different angle. Isn't it essentially about selecting k people, comparing their work efficiency to the lowest among them, and calculating the total wage based on this lowest work efficiency to find the minimum total wage? Therefore, this problem can be approached by fixing a max heap of size k and ensuring through certain operations that the top of the heap is the k-th smallest (similar to the operations in the previous problems).
 
-And in the previous solution, triples (q /w, q, w) are also used, which is actually not necessary. Because two of them are known, the other one can be derived, so it is enough to store two, and because we need to compare the keys of the heap according to the work efficiency, we can choose any q or W. Here I chose q, which is to store the binary group (q/2, q).
+Moreover, the previous solution used a tuple of (q / w, q, w), which is actually unnecessary. Since two of these values are known, the third can be deduced, so storing two is sufficient. As we need to use the ratio of work efficiency as the key for the heap, we can choose either q or w. Here, I have chosen q, i.e., storing a tuple of (q/2, q).
 
-Specifically, it is: the total salary of k individuals with rate as the lowest work efficiency ratio = $\displaystyle\sum_{n=1}^{k}{q}_{n}/rate$, where the rate is the current q/w, and it is also the minimum value of k individuals' q/W.
+Specifically, the total wages for k people with rate as the lowest work efficiency ratio equals $\displaystyle \sum_{n=1}^{k}{q}_{n}/rate$, where this rate is the current **q/w** and also the minimum **q/w** among the k people.
 
 ##### Code
 
 ```py
 class Solution:
-def mincostToHireWorkers(self, quality: List[int], wage: List[int], K: int) -> float:
-effs = [(q / w, q) for q, w in zip(quality, wage)]
-effs. sort(key=lambda a: -a[0])
-ans = float('inf')
-h = []
-total = 0
-for rate, q in effs:
-heapq. heappush(h, -q)
-total += q
-if len(h) > K:
-total += heapq. heappop(h)
-if len(h) == K:
-ans = min(ans, total / rate)
-return ans
+    def mincostToHireWorkers(self, quality: List[int], wage: List[int], K: int) -> float:
+        effs = [(q / w, q) for q, w in zip(quality, wage)]
+        effs.sort(key=lambda a: -a[0])
+        ans = float('inf')
+        h = []
+        total = 0
+        for rate, q in effs:
+            heapq.heappush(h, -q)
+            total += q
+            if len(h) > K:
+                total += heapq.heappop(h)
+            if len(h) == K:
+                ans = min(ans, total / rate)
+        return ans
 ```
 
 (Code 1.3.3)
 
-### Technique 2-Multiple Mergers
+### Technique Two - Multi-way Merge
 
-This technique was actually mentioned earlier when talking about super ugly numbers, but it didn't give this type of topic a name.
+This technique was actually mentioned before when discussing **Super Ugly Number**, but it wasn't given a **specific name**.
 
-In fact, this technique may be more appropriate to be called multi-pointer optimization, but the name is too simple and easy to confuse with double pointers, so I gave ta a chic name-Multi-channel merge.
+Actually, calling it multi-pointer optimization might be more appropriate, but this name is too plain and easily confused with two-pointer techniques. Therefore, I gave it a unique name - **Multi-way Merge**.
 
--Multiple routes are reflected in: there are multiple candidate routes. In the code, we can use multiple pointers to represent it. -The merger is reflected in: the result may be the longest or shortest of multiple candidate routes, or it may be the kth, etc. Therefore, we need to compare the results of multiple routes, and discard or select one or more routes according to the topic description.
+- "Multi-way" is reflected in having multiple candidate paths. In the code, we can represent these with multiple pointers.
+- "Merge" is reflected in the fact that the result could be the longest or shortest among several candidates, or perhaps the k-th one, etc. Therefore, we need to compare the results of multiple paths and, based on the problem statement, discard or select one or more paths.
 
-This description is more abstract. Next, let's deepen everyone's understanding through a few examples.
+This description is quite abstract, so let's deepen the understanding with a few examples.
 
-Here I have carefully prepared four questions with a difficulty of hard\*\* for everyone. After mastering this routine, you can answer these four questions happily.
+Here, I have carefully prepared four hard-level problems for you. Mastering this technique will allow you to joyfully solve these four problems.
 
-#### 1439. The k-th smallest array in an ordered matrix and
+#### 1439. Find the Kth Smallest Sum of a Matrix With Sorted Rows
 
-##### Title description
+##### Problem Description
 
 ```
-Give you a matrix mat of m*n, and an integer K. Each row in the matrix is arranged in a non-decreasing order.
+You are given an m * n matrix mat, and an integer k. Each row of the matrix is sorted in non-decreasing order.
 
-You can select 1 element from each row to form an array. Returns the kth smallest array sum of all possible arrays.
+You can select 1 element from each row to form an array. Return the k-th smallest array sum among all possible arrays.
 
-
-
-Example 1：
+Example 1:
 
 Input: mat = [[1,3,11],[2,4,6]], k = 5
 Output: 7
-Explanation: Select an element from each row, the first k and smallest arrays are：
-[1,2], [1,4], [3,2], [3,4], [1,6]。 The sum of the 5th one is 7.
-Example 2：
+Explanation: Selecting one element from each row, the first k smallest sums of arrays are:
+[1,2], [1,4], [3,2], [3,4], [1,6]. The 5th smallest sum among them is 7.
+Example 2:
 
 Input: mat = [[1,3,11],[2,4,6]], k = 9
 Output: 17
-Example 3：
+Example 3:
 
 Input: mat = [[1,10,10],[1,4,5],[2,3,6]], k = 7
 Output: 9
-Explanation: Select an element from each row, the first k and smallest arrays are：
-[1,1,2], [1,1,3], [1,4,2], [1,4,3], [1,1,6], [1,5,2], [1,5,3]。 The sum of the 7th one is 9.
-Example 4：
+Explanation: Selecting one element from each row, the first k smallest sums of arrays are:
+[1,1,2], [1,1,3], [1,4,2], [1,4,3], [1,1,6], [1,5,2], [1,5,3]. The 7th smallest sum among them is 9.
+Example 4:
 
 Input: mat = [[1,1,10],[2,2,9]], k = 7
 Output: 12
 
+Constraints:
 
-prompt：
-
-m == mat. length
-n == mat. length[i]
+m == mat.length
+n == mat.length[i]
 1 <= m, n <= 40
 1 <= k <= min(200, n ^ m)
 1 <= mat[i][j] <= 5000
 mat[i] is a non-decreasing array
-
 ```
 
 ##### Idea
 
-In fact, this question is to give you m one-dimensional arrays of the same length. Let us select a number from these m arrays, that is, select a total of m numbers, and find that the sum of these m numbers is The kth smallest among all selection possibilities.
+This problem essentially gives you m one-dimensional arrays of equal length, and asks you to select one number from each of these m arrays, i.e., a total of m numbers, to find the sum that is the k-th smallest among **all possible selections**.
 
 ![](https://p.ipic.vip/xi03t7.jpg)
 
-A simple idea is to use multiple pointers to solve. For this question, it is to use m pointers to point to m one-dimensional arrays. The position of the pointers indicates that the first few in the one-dimensional array are currently selected.
+A naive idea is to use multiple pointers for the solution. For this problem, it would mean using m pointers, each pointing to one of the m one-dimensional arrays, where the position of the pointer indicates the current selection from that array.
 
-Take the'mat in the title = [[1,3,11],[2,4,6]], Take k = 5` as an example.
+Take the example from the problem `mat = [[1,3,11],[2,4,6]], k = 5.`
 
--First initialize two pointers p1 and p2, which point to the beginning of two one-dimensional arrays. The code indicates that they are all initialized to 0. -At this time, the sum of the numbers pointed to by the two pointers is 1 + 2 = 3, which is the first smallest sum. -Next, we move one of the pointers. At this time, we can move p1 or p2. -Then the second smallest value must be the smaller value of the two cases of moving p1 and moving p2. And here moving p1 and p2 will actually get 5, which means that the sum of the second and third small ones is 5.
+- First, initialize two pointers p1 and p2, each pointing to the beginning of the two one-dimensional arrays, which means initializing them to 0 in the code.
+- At this point, the sum of the numbers pointed to by the two pointers is 1 + 2 = 3, which is the 1st smallest sum.
+- Next, we move one of the pointers. Now, we can move either p1 or p2.
+- The 2nd smallest sum will be the smaller of the two sums obtained by moving p1 and moving p2. Here, moving either p1 or p2 both result in 5, which means the 2nd and 3rd smallest sums are both 5.
 
-It has been forked here, and two situations have occurred (pay attention to the bold position, the bold indicates the position of the pointer)：
+We now have two scenarios (note the bold position, which represents the position of the pointer):
 
-1. [1,**3**,11],[**2**,4,6] Sum to 5
-2. [**1**,3,11],[2,**4**,6] Sum to 5
+1. [1,**3**,11],[**2**,4,6] with a sum of 5
+2. [**1**,3,11],[2,**4**,6] with a sum of 5
 
-Next, these two situations should go hand in hand and proceed together.
+Next, these two scenarios should **proceed together.**
 
-For Case 1, there are two more cases of moving next.
+For scenario 1, moving next yields two possibilities.
 
 1. [1,3,**11**],[**2**,4,6] Sum to 13
 2. [1,**3**,11],[2,**4**,6] Sum to 7
 
-For Case 2, there are also two cases of moving next.
+For scenario 2, moving next also yields two possibilities.
 
 1. [1,**3**,11],[2,**4**,6] Sum to 7
 2. [**1**,3,11],[2,4,**6**] Sum to 7
+
+By comparing these four cases, we conclude: the 4th, 5th, and 6th smallest sums are all 7. However, the 7th smallest sum might not necessarily be 13. The reason is similar to above; the 7th smallest might be hidden in the new scenarios after the split at 7. In fact, it is indeed the case. Therefore, we need to continue with the above logic.
+
+Furthermore, we can extend the above approach to the general case.
+
+As mentioned, the problem requires finding the k-th smallest sum, and the smallest sum is easy to determine - it's the sum of the first items of all the one-dimensional arrays. We also found that from the smallest sum, we can deduce the 2nd smallest by moving one of the pointers, which creates n scenarios in total, where n is the length of the one-dimensional arrays. The 2nd smallest sum is among these n scenarios, and the selection is made by choosing the smallest sum among them. The subsequent scenarios are similar. It's not hard to see that each split changes the extreme values, indicating a dynamic search for extreme values, which makes using a heap a good choice.
+
+So how should the code be written?
+
+As mentioned above, we first need to initialize m pointers and set them to 0. Corresponding pseudocode:
+
+```
+# Initialize the heap
+h = []
+# sum(vec[0] for vec in mat) is the sum of the first items in m one-dimensional arrays
+# [0] * m initializes an array of length m filled entirely with 0s.
+# We assemble the above two pieces of information into a tuple cur for convenience
+cur = (sum(vec[0] for vec in mat), [0] * m)
+# Push it onto the heap
+heapq.heappush(h, cur)
+```
+Next, we move one pointer each time, thereby branching out into a new direction. Each time we pop the smallest element from the heap, and after k pops, we get the k-th smallest element. Pseudocode:
+
+```
+for 1 to K:
+    # acc is the current sum, pointers represents the state of the pointers.
+    acc, pointers = heapq.heappop(h)
+    # Each time, we crudely move one pointer in the pointer array. Each movement of a pointer results in one branch, with a total of n possible movements, where n is the length of the one-dimensional array.
+    for i, pointer in enumerate(pointers):
+        # If pointer == len(mat[0]) - 1, it means it has reached the end and can't be moved
+        if pointer != len(mat[0]) - 1:
+            # The next two lines mean to update the pointer at pointers[i] to pointers[i] + 1
+            new_pointers = pointers.copy()
+            new_pointers[i] += 1
+            # Push the updated acc and pointer array back into the heap
+            heapq.heappush(h, (acc + mat[i][pointer + 1] - mat[i][pointer], new_pointers))
+```
+
+This is the core code for a **Multi-way Merge** problem, and it's important to remember it.
+
+> The code may seem lengthy, but it's actually only seven lines if you remove the comments.
+
+The above pseudocode has a potential issue. For example, consider two one-dimensional arrays with pointers both initialized to 0. If we move the pointer of the first array first and then the pointer of the second array second, the pointers array becomes [1, 1], meaning all pointers are pointing to the elements at index 1. Conversely, if we move the pointer of the second array first and then the pointer of the first array, the pointers array is still [1, 1]. This is actually the same scenario, and if not controlled, it will be calculated twice, leading to errors.
+
+One possible solution is to use a hashset to record all pointer states, thus avoiding the same pointer configuration being calculated multiple times. To do this, we need to make a slight adjustment in how we use the pointers array, namely, using tuples instead of arrays. The reason is that arrays cannot be hashed directly. For more details, please refer to the code section.
+
+The problems involving **Multi-way Merge** typically have similar thought processes and codes. To better understand the subsequent problems, it's crucial to grasp this problem thoroughly, as we will not analyze subsequent problems in such detail.
+
+
+
