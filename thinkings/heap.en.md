@@ -1,192 +1,194 @@
-# 堆专题
+# Heap Topic
 
 ![](https://p.ipic.vip/dns3hz.jpg)
 
-大家好，我是 lucifer。今天给大家带来的是《堆》专题。先上下本文的提纲，这个是我用 mindmap 画的一个脑图，之后我会继续完善，将其他专题逐步完善起来。
+Hello everyone, I am lucifer. Today I bring you the topic of "Heap". First, let's look at the outline of this article, which I've created using a mindmap. I will continue to refine it and gradually complete other topics.
 
-> 大家也可以使用 vscode blink-mind 打开源文件查看，里面有一些笔记可以点开查看。源文件可以去我的公众号《力扣加加》回复脑图获取，以后脑图也会持续更新更多内容。vscode 插件地址：https://marketplace.visualstudio.com/items?itemName=awehook.vscode-blink-mind
+> You can also use the vscode blink-mind extension to open the source file and view some notes. The source file can be obtained by replying to my public account "力扣加加" (LeetCode Plus Plus) for the mindmap, and I will continue to update it with more content. The vscode extension link is: https://marketplace.visualstudio.com/items?itemName=awehook.vscode-blink-mind
 
-本系列包含以下专题：
+This series includes the following topics:
 
-- [几乎刷完了力扣所有的链表题，我发现了这些东西。。。](https://lucifer.ren/blog/2020/11/08/linked-list/)
-- [几乎刷完了力扣所有的树题，我发现了这些东西。。。](https://lucifer.ren/blog/2020/11/23/tree/)
-- 几乎刷完了力扣所有的堆题，我发现了这些东西。。。（就是本文）
-
+- [After nearly completing all the linked list questions on LeetCode, I discovered these things...](https://lucifer.ren/blog/2020/11/08/linked-list/)
+- [After nearly completing all the tree questions on LeetCode, I discovered these things...](https://lucifer.ren/blog/2020/11/23/tree/)
+- After nearly completing all the heap questions on LeetCode, I discovered these things... (which is this article)
+- 
 <!-- more -->
 
-## 一点絮叨
+## A Little Ramble
 
-[堆标签](https://leetcode-cn.com/tag/tree/ "堆标签")在 leetcode 一共有 **42 道题**。 为了准备这个专题，我将 leetcode 几乎所有的堆题目都刷了一遍。
+There are 42 questions under the [Heap tag](https://leetcode.cn/tag/tree/problemset/) on LeetCode. To prepare for this topic, I went through almost all of the heap questions on LeetCode.
 
 ![](https://p.ipic.vip/qx5cws.jpg)
 
-可以看出，除了 3 个上锁的，其他我都刷了一遍。通过集中刷这些题，我发现了一些有趣的信息，今天就分享给大家。
+As you can see, except for 3 locked ones, I have tried all of them. By focusing on these questions, I found some interesting information, which I will share with you today.
 
-需要注意的是，本文不对堆和优先队列进行区分。因此本文提到的堆和优先队列大家可以认为是同一个东西。如果大家对两者的学术区别感兴趣，可以去查阅相关资料。
+It's important to note that this article does not distinguish between heaps and priority queues. Therefore, you can consider the heaps and priority queues mentioned in this article as the same thing. If you are interested in the academic differences between the two, you can refer to relevant materials.
 
-> 如果不做特殊说明，本文的堆均指的是小顶堆。
+> Unless specified otherwise, the heaps mentioned in this article refer to min-heaps.
 
-## 堆的题难度几何？
+## How Difficult Are Heap Problems?
 
-堆确实是一个难度不低的专题。从官方的难度标签来看，堆的题目一共才 42 道，困难度将近 50%。没有对比就没有伤害，树专题困难度只有不到 10%。
+Heap is indeed a challenging topic. According to the official difficulty tags, there are only 42 heap problems, with nearly 50% being of hard difficulty. To put this into perspective, less than 10% of tree-related topics are marked as hard.
 
-从通过率来看，**一半以上**的题目平均通过率在 50% 以下。作为对比， 树的题目通过率在 50% 以下的只有**不到三分之一**。
+In terms of pass rate, **more than half** of the heap problems have an average pass rate below 50%. By comparison, less than one-third of tree problems have a pass rate below 50%.
 
-不过大家不要太有压力。lucifer 给大家带来了一个口诀**一个中心，两种实现，三个技巧，四大应用**，我们不仅讲实现和原理，更讲问题的**背景以及套路和模板**。
+However, don't feel too pressured. I, lucifer, bring you a mnemonic: **"One core, two implementations, three techniques, four applications"**. We will discuss not only implementations and principles but also the **background, patterns, and templates** of problems.
 
-> 文章里涉及的模板大家随时都可以从我的[力扣刷题插件 leetcode-cheatsheet](https://chrome.google.com/webstore/detail/leetcode-cheatsheet/fniccleejlofifaakbgppmbbcdfjonle/related?hl=zh-CN&authuser=0 "力扣刷题插件 leetcode-cheatsheet") 中获取。
+> [The templates mentioned in the article can be accessed anytime from my LeetCode Cheatsheet Plugin.](https://chrome.google.com/webstore/detail/leetcode-cheatsheet/fniccleejlofifaakbgppmbbcdfjonle/related?hl=zh-CN&authuser=0 "力扣刷题插件 leetcode-cheatsheet")
 
-## 堆的使用场景分析
+## Analysis of Heap Use Cases
 
-堆其实就是一种数据结构，数据结构是为了算法服务的，那堆这种数据结构是为哪种算法服务的？它的适用场景是什么？ 这是每一个学习堆的人**第一个**需要解决的问题。
-在什么情况下我们会使用堆呢？堆的原理是什么？如何实现一个堆？别急，本文将一一为你揭秘。
+A heap is essentially a data structure, and data structures serve algorithms. So, what kind of algorithms does the heap data structure serve, and what are its use cases? This is the **first** question anyone learning about heaps needs to solve.
+When do we use heaps? What are the principles behind heaps? How is a heap implemented? Don't worry, this article will unveil these secrets.
 
-在进入正文之前，给大家一个学习建议 - **先不要纠结堆怎么实现的，咱先了解堆解决了什么问题**。当你了解了使用背景和解决的问题之后，然后**当一个调包侠**，直接用现成的堆的 api 解决问题。等你理解得差不多了，再去看堆的原理和实现。我就是这样学习堆的，因此这里就将这个学习经验分享给你。
+Before getting into the main content, here's a learning tip - **don't get too caught up in how a heap is implemented; first, understand what problem it solves.** Once you understand the background and the problem it addresses, act like a "package manager", directly using existing heap APIs to solve problems. Once you have a good understanding, then delve into the principles and implementation of heaps. This is how I learned about heaps, so I'm sharing this experience with you.
 
-为了对堆的使用场景进行说明，这里我虚拟了一个场景。
+To illustrate the use scenarios of heaps, let's consider a hypothetical scenario.
 
-**下面这个例子很重要， 后面会反复和这个例子进行对比**。
+**The following example is important; it will be referenced repeatedly later in the discussion.**
 
-### 一个挂号系统
+### A Registration System
 
-#### 问题描述
+#### Problem Description
 
-假如你是一个排队挂号系统的技术负责人。该系统需要给每一个前来排队的人发放一个排队码（入队），并根据**先来后到**的原则进行叫号（出队）。
+Imagine you are the technical lead of a queuing system for registration. This system needs to issue a queue number to each person in line (enqueue), and call numbers based on a first-come, first-served principle (dequeue).
 
-除此之外，我们还可以区分了几种客户类型， 分别是普通客户， VIP 客户 和 至尊 VIP 客户。
+Additionally, we have several types of customers: ordinary customers, VIP customers, and supreme VIP customers.
 
-- 如果不同的客户使用不同的窗口的话，我该如何设计实现我的系统？（大家获得的服务不一样，比如 VIP 客户是专家级医生，普通客户是普通医生）
-- 如果不同的客户都使用一个窗口的话，我该如何设计实现我的系统？（大家获得的服务都一样，但是优先级不一样。比如其他条件相同情况下(比如他们都是同时来挂号的)，VIP 客户 优先级高于普通客户）
+- If different types of customers use different windows, how should I design and implement my system? (They receive different services, like VIP customers get expert doctors, while ordinary customers get general doctors)
 
-我该如何设计我的系统才能满足需求，并获得较好的扩展性？
+- If different types of customers use the same window, how should I design and implement my system? (They receive the same service, but with different priorities. For instance, under the same conditions (like arriving at the same time), VIP customers have higher priority than ordinary customers)
 
-#### 初步的解决方案
+How should I design my system to meet these requirements and achieve good scalability?
 
-如果不同的客户使用不同的窗口。那么我们可以设计三个队列，分别存放正在排队的三种人。这种设计满足了题目要求，也足够简单。
+#### Preliminary Solution
+
+If different types of customers use different windows, we can design three separate queues for the three types of people waiting in line. This design satisfies the requirements of the problem and is sufficiently simple.
 
 ![](https://p.ipic.vip/noqe15.jpg)
 
-如果我们**只有一个窗口**，所有的病人需要使用同一个队列，并且同样的客户类型按照上面讲的**先到先服务原则**，但是不同客户类型之间可能会插队。
+However, if **we have only one window** where all patients use the same queue, and customers of the same type follow the first-come, first-served principle mentioned above, customers of different types might cut in line.
 
-简单起见，我引入了**虚拟时间**这个概念。具体来说：
+To simplify, I introduce the concept of **virtual time**. Specifically:
 
-- 普通客户的虚拟时间就是真实时间。
-- VIP 客户的虚拟时间按照实际到来时间减去一个小时。比如一个 VIP 客户是 14:00 到达的，我认为他是 13:00 到的。
-- 至尊 VIP 客户的虚拟时间按照实际到来时间减去两个小时。比如一个 至尊 VIP 客户是 14:00 到达的，我认为他是 12:00 到的。
+- The virtual time for ordinary customers is the same as the real time.
+- The virtual time for VIP customers is their actual arrival time minus one hour. For example, if a VIP customer arrives at 14:00, we consider them as having arrived at 13:00.
+- The virtual time for supreme VIP customers is their actual arrival time minus two hours. For instance, if a supreme VIP customer arrives at 14:00, we consider them as having arrived at 12:00.
 
-这样，我们只需要按照上面的”虚拟到达时间“进行**先到先服务**即可。
+With this approach, we only need to serve customers based on their **"virtual arrival time"**.
 
-因此我们就可以继续使用刚才的三个队列的方式，只不过队列存储的不是真实时间，而是虚拟时间。每次开始叫号的时候，我们使用虚拟时间比较，虚拟时间较小的先服务即可。
+Therefore, we can continue using the three-queue approach from before, except the queues store virtual times instead of real times. Each time we start calling numbers, we compare virtual times and serve those with the earlier virtual times first.
 
 ![](https://p.ipic.vip/clq91x.jpg)
 
-> 不难看出，队列内部的时间都是有序。
+> It's not hard to see that the times within each queue are ordered.
 
-**而这里的虚拟时间，其实就是优先队列中的优先权重**，虚拟时间越小，权重越大。
+**In this scenario, the virtual time essentially represents the priority weight in a priority queue,** where a smaller virtual time implies a higher priority.
 
-#### 可以插队怎么办？
+#### Dealing with Queue Jumping
 
-这种算法很好地完成了我们的需求，复杂度相当不错。不过事情还没有完结，这一次我们又碰到新的产品需求：
+This algorithm effectively meets our requirements with a good level of complexity. However, the situation is not yet fully resolved; we have encountered new product requirements:
 
-- 如果有别的门诊的病人转院到我们的诊所，则按照他之前的排队信息算，比如 ta 是 12:00 在别的院挂的号，那么转到本院仍然是按照 12:00 挂号算。
-- 如果被叫到号三分钟没有应答，将其作废。但是如果后面病人重新来了，则认为他是当前时间减去一个小时的虚拟时间再次排队。比如 ta 是 13:00 被叫号，没有应答，13：30 又回来，则认为他是 12:30 排队的，重新进队列。
+- If a patient from another clinic is transferred to our clinic, they will be placed in the queue based on their previous waiting time. For example, if someone was registered at 12:00 in another clinic, they are still considered to have registered at 12:00 in our clinic.
+- If a patient does not respond within three minutes of being called, their spot is forfeited. However, if they return later, they are requeued with a virtual time of one hour before the current time. For example, if they were called at 13:00, did not respond, and came back at 13:30, they are considered to have joined the queue at 12:30 and are re-enqueued.
 
-这样就有了”插队“的情况了。该怎么办呢？一个简单的做法是，将其插入到正确位置，并**重新调整后面所有人的排队位置**。
+This introduces a situation of "queue jumping." How should this be handled? A simple method is to insert them into the correct position and **readjust the positions of everyone else in line.**
 
-如下图是插入一个 1:30 开始排队的普通客户的情况。
+
+The following images illustrate the insertion of a regular customer who starts queuing at 1:30.
 
 ![](https://p.ipic.vip/q22wm2.jpg)
-（查找插入位置）
+(Finding the insertion point)
 
 ![](https://p.ipic.vip/uhftpi.jpg)
-（将其插入）
+(Inserting them into the queue)
 
-如果队列使用数组实现， 上面插队过程的时间复杂度为 $O(N)$，其中 $N$ 为被插队的队伍长度。如果队伍很长，那么调整的次数明显增加。
+If the queue is implemented as an array, the time complexity of the queue-jumping process is $O(N)$ where $N$ is the length of the queue being jumped. If the queue is long, the number of adjustments increases significantly.
 
-不过我们发现，本质上我们就是在维护一个**有序列表**，而使用数组方式去维护有序列表的好处是可以随机访问，但是很明显这个需求并不需要这个特性。如果使用链表去实现，那么时间复杂度理论上是 $O(1)$，但是如何定位到需要插入的位置呢？朴素的思维是遍历查找，但是这样的时间复杂度又退化到了 $O(N)$。有没有时间复杂度更好的做法呢？答案就是本文的主角**优先队列**。
+However, we realize that what we are essentially maintaining is an **ordered list**. While using an array allows for random access, this feature is not necessary for our requirements. If we use a linked list, the theoretical time complexity is $O(1)$， but how do we locate the insertion point? A naive approach is to search by traversal, but this degrades the time complexity back to $O(N)$. Is there a better approach? The answer lies in our main topic: **priority queues**.
 
-上面说了链表的实现核心在于查找也需要 $O(N)$，我们可以优化这个过程吗？实际上这就是优先级队列的链表实现，由于是有序的，我们可以用跳表加速查找，时间复杂度可以优化到 $O(logN)$。
+As mentioned, even with a linked list, searching requires $O(N)$，time. Can we optimize this process? In fact, this is a priority queue implemented as a linked list. Since it is ordered, we can use a skip list to accelerate the search, reducing the time complexity to $O(logN)$。
 
 ![](https://p.ipic.vip/t6l1jp.jpg)
 
-其实算法界有很多类似的问题。比如建立数据库索引的算法，如果给某一个有序的列添加索引，不能每次插入一条数据都去调整所有的数据吧（上面的数组实现）？因此我们可以用平衡树来实现，这样每次插入可以最多调整 $(O(logN))$。优先队列的另外一种实现 - 二叉堆就是这个思想，时间复杂度也可以优化到 $O(logN)$
+Many similar problems exist in the world of algorithms. For example, in building database indexes, if we add an index to an ordered column, we can't adjust all the data every time we insert a record (as with the array implementation). Therefore, we can use a balanced tree, where each insertion adjusts at most $(O(logN))$ data. Another implementation of the priority queue, the binary heap, also optimizes the time complexity to $O(logN)$.
 
 ![](https://p.ipic.vip/0au6fq.jpg)
 
-本文只讲解常见的二叉堆实现，对于跳表和红黑树不再这里讲。 关于优先队列的二叉堆实现，我们会在后面给大家详细介绍。这里大家只有明白优先队列解决的问题是什么就可以了。
+This article only explains the common binary heap implementation and does not cover skip lists and red-black trees. We will introduce the binary heap implementation of priority queues in detail later. For now, it's important to understand what problem the priority queue solves.
 
-#### 使用堆解决问题
+#### Solving Problems with Heaps
 
-堆的两个核心 API 是 push 和 pop。
+The two core APIs of a heap are `push` and `pop`.
 
-大家先不考虑它怎么实现的，你可以暂时把 ta 想象成一个黑盒，提供了两个 api：
+Don't worry about how they are implemented for now; you can think of it as a black box that provides two APIs:
 
-- `push`： 推入一个数据，内部怎么组织我不管。对应我上面场景里面的**排队**和**插队**。
-- `pop`： 弹出一个数据，该数据一定是最小的，内部怎么实现我不管。对应我上面场景里面的**叫号**。
+- `push`: Inserts data without concern for the internal organization. This corresponds to **queueing** and **queue jumping** in the scenario described above.
+- `pop`： Removes and returns the smallest data element, again without needing to know the internal mechanics. This corresponds to **calling numbers** in the scenario above.
 
-> 这里的例子其实是小顶堆。而如果弹出的数据一定是最大的，那么对应的实现为大顶堆。
+> The examples here actually refer to a min-heap. In a max-heap, the `pop` function would return the largest element.
 
-借助这两个 api 就可以实现上面的需求。
+Using these two APIs, we can implement the requirements mentioned above.
 
 ```py
-# 12:00 来了一个普通的顾客（push）
+# 12:00 - A regular customer arrives (push)
 heapq.heappush(normal_pq, '12:00')
-# 12:30 来了一个普通顾客（push）
+# 12:30 - Another regular customer arrives (push)
 heapq.heappush(normal_pq, '12:30')
-# 13:00 来了一个普通顾客（push）
+# 13:00 - Another regular customer arrives (push)
 heapq.heappush(normal_pq, '13:00')
-# 插队（push）。时间复杂度可以达到 O(logN)。如何做到先不管，我们先会用就行，具体实现细节后面再讲。
-heapq.heappush(normal_pq, '12: 20')
-# 叫号（pop）。12:00 来的先被叫到。需要注意的是这里的弹出时间复杂度也变成了 O(logN)，这或许就是幸福的代价吧。
+# Queue jumping (push). The time complexity can reach O(logN). Let's not worry about the specifics for now; we'll cover that later.
+heapq.heappush(normal_pq, '12:20')
+# Calling numbers (pop). The customer from 12:00 is called first. Note that the popping time complexity has also become O(logN), which might be considered the price of convenience.
 heapq.heappop(normal_pq)
 ```
 
-### 小结
+### Summary
 
-上面这个场景单纯使用数组和链表都可以满足需求，但是使用其他数据结构在应对”插队“的情况表现地会更好。
+In the scenario above, using either arrays or linked lists can meet the requirements, but other data structures perform better in handling "queue jumping."
 
-具体来说：
+Specifically：
 
-- 如果永远都维护一个有序数组的方式取极值很容易，但是插队麻烦。
+- Maintaining a sorted array at all times makes it easy to find extreme values, but queue jumping is problematic.
 
-- 如果永远都维护一个有序链表的方式取极值也容易。 不过要想查找足够快，而不是线性扫描，就需要借助索引，这种实现对应的就是优先级队列的**跳表实现**。
+- Maintaining a sorted linked list also makes it easy to find extreme values. However, to find the insertion point quickly and not just through linear scanning, we need to use indexes. This implementation corresponds to the **skip list implementation** of a priority queue.
 
-- 如果永远都维护一个树的方式取极值也可以实现，比如根节点就是极值，这样 O(1) 也可以取到极值，但是调整过程需要 $O(logN)$。这种实现对应的就是优先级队列的**二叉堆实现**。
+- Maintaining a tree at all times can also achieve this, where the root node is the extreme value, allowing $O(1)$ access to it, but the adjustment process requires $O(logN)$. This implementation corresponds to the **binary heap implementation** of a priority queue.
 
-简单总结下就是，**堆就是动态帮你求极值的**。当你需要动态求最大或最小值就就用它。而具体怎么实现，复杂度的分析我们之后讲，现在你只要记住使用场景，堆是如何解决这些问题的以及堆的 api 就够了。
+To summarize, **a heap dynamically helps you find extreme values.** Use it when you need to dynamically find the maximum or minimum value. The specifics of how it's implemented and the complexity analysis will be discussed later. For now, just remember the usage scenarios, how a heap solves these problems, and the heap APIs.
 
-## 队列 VS 优先队列
+## Queue vs. Priority Queue
 
-上面通过一个例子带大家了解了一下优先队列。那么在接下来讲具体实现之前，我觉得有必要回答下一个大家普遍关心的问题，那就是**优先队列是队列么**？
+Through an example, we've just explored the concept of a priority queue. Before delving into the specific implementations, I think it's necessary to address a common question: Is a priority queue a queue?
 
-很多人觉得队列和优先队列是完全不同的东西，就好像 Java 和 JavaScript 一样，我看了很多文章都是这么说的。
+Many people believe that queues and priority queues are entirely different, similar to how Java and JavaScript are different. This is a common assertion in many articles.
 
-而我不这么认为。实际上，普通的队列也可以看成是一个特殊的**优先级队列**， 这和网上大多数的说法**优先级队列和队列没什么关系**有所不同。我认为**队列无非就是以时间这一变量作为优先级的优先队列**，时间越早，优先级越高，优先级越高越先出队。
+However, I have a different view. In fact, a regular queue can be considered a special kind of **priority queue**. This differs from the majority opinion that **priority queues and queues have little in common**. I believe that **a queue is simply a priority queue where time is the variable used as the priority**: the earlier the time, the higher the priority, and the higher the priority, the earlier it leaves the queue.
 
-大家平时写 BFS 的时候都会用到队列来帮你处理节点的访问顺序。那使用优先队列行不行？当然可以了！我举个例子：
+When writing BFS (Breadth-First Search) algorithms, we usually use queues to manage the order of node visits. But can a priority queue be used instead? Of course! Let me give an example:
 
-### 例题 - 513. 找树左下角的值
+### Example Problem - 513. Find Bottom Left Tree Value
 
-#### 题目描述
+#### Problem Description
 
 ```
-定一个二叉树，在树的最后一行找到最左边的值。
+Given a binary tree, find the leftmost value in the last row of the tree.
 
-示例 1:
+Example 1:
 
-输入:
+Input:
 
     2
    / \
   1   3
 
-输出:
+Output:
 1
  
 
-示例 2:
+Example 2:
 
-输入:
+Input:
 
         1
        / \
@@ -196,22 +198,22 @@ heapq.heappop(normal_pq)
        /
       7
 
-输出:
+Output:
 7
  
 
-注意: 您可以假设树（即给定的根节点）不为 NULL。
+Note: You may assume the tree (i.e., the given root node) is not NULL.
 ```
 
-#### 思路
+#### Approach
 
-我们可以使用 BFS 来做一次层次遍历，并且每一层我们都从右向左遍历，这样层次遍历的最后一个节点就是**树左下角的节点**。
+We can use BFS (Breadth-First Search) to perform a level-order traversal of the tree. For each level, we traverse from right to left. This way, the last node encountered in the level-order traversal will be the **leftmost node in the bottom row** of the tree.
 
-常规的做法是使用双端队列（就是队列）来实现，由于队列的先进先出原则很方便地就能实现**层次遍历**的效果。
+The conventional method uses a deque (double-ended queue), which easily implements the level-order traversal due to the first-in-first-out principle of queues.
 
-#### 代码
+#### Code
 
-对于代码看不懂的同学，可以先不要着急。等完整读完本文之后再回过头看会容易很多。下同，不再赘述。
+For those who might not understand the code right away, don't worry. It might be easier to revisit this section after reading through the entire article. The same goes for subsequent sections; further explanation will not be repeated.
 
 Python Code:
 
@@ -234,7 +236,7 @@ class Solution:
 
 ```
 
-实际上， 我们也可以使用优先队列的方式，思路和代码也几乎和上面完全一样。
+In fact, we can also use a priority queue in a similar way, with the thought process and code almost identical to the above.
 
 ```py
 class Solution:
@@ -242,7 +244,7 @@ class Solution:
         if root is None:
             return None
         queue = []
-        # 堆存储三元组(a,b,c)，a 表示层级，b 表示节点编号（以完全二叉树的形式编号，空节点也编号），c 是节点本身
+        # The heap stores a tuple (a, b, c), where a is the level, b is the node number (numbered as in a complete binary tree, including null nodes), and c is the node itself
         heapq.heappush(queue, (1, 1, root))
         ans = None
         while queue:
@@ -257,75 +259,75 @@ class Solution:
         return ans.val
 ```
 
-### 小结
+### Summary
 
-**所有使用队列的地方，都可以使用优先队列来完成，反之却不一定。**
+**Every place where a queue is used, a priority queue can be used as well, but the reverse is not always true.**
 
-既然优先队列这么厉害，那平时都用优先队列不就行了？为啥使用队列的地方没见过别人用堆呢？最核心的原因是时间复杂度更差了。
+Since priority queues are so powerful, why don't we use them all the time instead of regular queues? The main reason is that they have a worse time complexity.
 
-比如上面的例子，本来入队和出队都可是很容易地在 $O(1)$ 的时间完成。而现在呢？入队和出队的复杂度都是 $O(logN)$，其中 N 为当前队列的大小。因此在没有必要的地方使用堆，会大大提高算法的时间复杂度，这当然不合适。说的粗俗一点就是脱了裤子放屁。
+For example, in the above case, enqueuing and dequeuing could easily be done in $O(1)$  time. But now? Both enqueuing and dequeuing have a complexity of $O(logN)$，where N is the current size of the queue. Therefore, using a heap where it's not necessary greatly increases the algorithm's time complexity, which is of course not appropriate. Crudely put, it's like 'taking off your pants to fart' - an unnecessarily complicated way to do a simple task.
 
-不过 BFS 真的就没人用优先队列实现么？当然不是！比如带权图的最短路径问题，如果用队列做 BFS 那就需要优先队列才可以，因为路径之间是有**权重的差异**的，这不就是优先队列的设计初衷么。**使用优先队列的 BFS 实现典型的就是 dijkstra 算法**。
+But are priority queues really never used for BFS? Of course not! For instance, in shortest path problems in weighted graphs, priority queues are necessary instead of regular queues for BFS, because the paths have **differences in weights**. This is exactly what priority queues were designed for. **A typical BFS implementation using a priority queue is the Dijkstra's algorithm.**
 
-这再一次应征了我的那句话**队列就是一种特殊的优先队列而已**。特殊到大家的权重就是按照到来的顺序定，谁先来谁的优先级越高。在这种特殊情况下，我们没必须去维护堆来完成，进而获得更好的时间复杂度。
+This reinforces my point that **a queue is just a special type of priority queue.** It's special in that everyone's priority is determined by their order of arrival - the earlier someone arrives, the higher their priority. In such cases, there's no need to maintain a heap, thus achieving better time complexity.
 
-## 一个中心
+## The Central Concept
 
-堆的问题核心点就一个，那就是**动态求极值**。动态和极值二者缺一不可。
+The core concept of heap problems is **dynamically finding** extreme values. Both 'dynamic' and 'extreme value' are essential components.
 
-求极值比较好理解，无非就是求最大值或者最小值，而动态却不然。比如要你求一个数组的第 k 小的数，这是动态么？这其实完全看你怎么理解。而在我们这里，这种情况就是动态的。
+Finding extreme values is relatively straightforward, usually meaning to find the maximum or minimum value. However, 'dynamic' is not as straightforward. For example, if you're asked to find the k-th smallest number in an array, is that dynamic? This actually depends on your interpretation. In our context, this situation is considered dynamic.
 
-如何理解上面的例子是动态呢？
+How to understand that the above example is dynamic?
 
-你可以这么想。由于堆只能求极值。比如能求最小值，但不能直接求第 k 小的值。
+Think of it this way: since a heap can only find extreme values (e.g., the smallest value), it cannot directly find the k-th smallest value.
 
-那我们是不是先求最小的值，然后将其出队（对应上面例子的叫号）。然后继续求最小的值，这个时候求的就是第 2 小了。如果要求第 k 小，那就如此反复 k 次即可。
+So, could we first find the smallest value, then remove it from the heap (corresponding to 'calling a number' in the previous example)? Then continue to find the smallest value again, which would now be the second smallest. To find the k-th smallest value, you would repeat this process k times.
 
-这个过程，你会发现数据是在**动态变化的**，对应的就是堆的大小在变化。
+During this process, you'll notice that the data is **dynamically changing**, corresponding to changes in the size of the heap.
 
-接下来，我们通过几个例子来进行说明。
+Next, let's illustrate this with a few examples.
 
-### 例一 - 1046. 最后一块石头的重量
+### Example 1 - 1046. Last Stone Weight
 
-#### 题目描述
+#### Problem Description
 
 ```
-有一堆石头，每块石头的重量都是正整数。
+There is a pile of stones, each stone has a positive integer weight.
 
-每一回合，从中选出两块 最重的 石头，然后将它们一起粉碎。假设石头的重量分别为 x 和 y，且 x <= y。那么粉碎的可能结果如下：
+Each round, choose the two heaviest stones and smash them together. Assume the weights of the stones are x and y, with x <= y. The possible outcomes of the smash are:
 
-如果 x == y，那么两块石头都会被完全粉碎；
-如果 x != y，那么重量为 x 的石头将会完全粉碎，而重量为 y 的石头新重量为 y-x。
-最后，最多只会剩下一块石头。返回此石头的重量。如果没有石头剩下，就返回 0。
+If x == y, both stones are completely smashed;
+If x != y, the stone weighing x is completely smashed, and the stone weighing y will have a new weight of y-x.
+In the end, there will be at most one stone left. Return the weight of this stone. Return 0 if there are no stones left.
 
  
 
-示例：
+Example:
 
-输入：[2,7,4,1,8,1]
-输出：1
-解释：
-先选出 7 和 8，得到 1，所以数组转换为 [2,4,1,1,1]，
-再选出 2 和 4，得到 2，所以数组转换为 [2,1,1,1]，
-接着是 2 和 1，得到 1，所以数组转换为 [1,1,1]，
-最后选出 1 和 1，得到 0，最终数组转换为 [1]，这就是最后剩下那块石头的重量。
+Input: [2,7,4,1,8,1]
+Output: 1
+Explanation:
+First, choose 7 and 8, resulting in 1, so the array becomes [2,4,1,1,1],
+Then choose 2 and 4, resulting in 2, so the array becomes [2,1,1,1],
+Next, choose 2 and 1, resulting in 1, so the array becomes [1,1,1],
+Finally, choose 1 and 1, resulting in 0, leaving the array as [1], which is the weight of the last remaining stone.
  
 
-提示：
+Constraints:
 
 1 <= stones.length <= 30
 1 <= stones[i] <= 1000
 ```
 
-#### 思路
+#### Approach
 
-题目比较简单，直接模拟即可。需要注意的是，每次选择两个最重的两个石头进行粉碎之后，最重的石头的重量便发生了变化。这会**影响到下次取最重的石头**。简单来说就是最重的石头在模拟过程中是**动态变化**的。
+The problem is relatively straightforward and can be solved by direct simulation. Note that after each round of smashing the two heaviest stones, the weight of the heaviest stone changes. This will **affect the choice of the heaviest stone in the next round**. Simply put, the weight of the heaviest stone is **dynamically changing** during the simulation.
 
-这种**动态取极值**的场景使用堆就非常适合。
+This scenario of **dynamically finding extreme values** is very suitable for using a heap.
 
-> 当然看下这个数据范围`1 <= stones.length <= 30 且 1 <= stones[i] <= 1000`，使用计数的方式应该也是可以的。
+> Of course, looking at the data range `1 <= stones.length <= 30 and 1 <= stones[i] <= 1000`, it should also be possible to use a counting method.
 
-#### 代码
+#### Code
 
 Java Code:
 
@@ -358,41 +360,43 @@ public class Solution {
 }
 ```
 
-### 例二 - 313. 超级丑数
+### Example 2 - 313. Super Ugly Number
 
-#### 题目描述
+#### Problem Description
 
 ```
-编写一段程序来查找第 n 个超级丑数。
+Write a program to find the nth super ugly number.
 
-超级丑数是指其所有质因数都是长度为 k 的质数列表 primes 中的正整数。
+A super ugly number is a positive integer whose prime factors are all from a given list of prime numbers of length k, called primes.
 
-示例:
+Example:
 
-输入: n = 12, primes = [2,7,13,19]
-输出: 32
-解释: 给定长度为 4 的质数列表 primes = [2,7,13,19]，前 12 个超级丑数序列为：[1,2,4,7,8,13,14,16,19,26,28,32] 。
-说明:
+Input: n = 12, primes = [2,7,13,19]
+Output: 32
+Explanation: Given a list of 4 prime numbers primes = [2,7,13,19], the sequence of the first 12 super ugly numbers is: [1,2,4,7,8,13,14,16,19,26,28,32].
+Note:
 
-1 是任何给定 primes 的超级丑数。
- 给定 primes 中的数字以升序排列。
-0 < k ≤ 100, 0 < n ≤ 10^6, 0 < primes[i] < 1000 。
-第 n 个超级丑数确保在 32 位有符整数范围内。
+1 is a super ugly number for any given primes.
+The numbers in the given primes are in ascending order.
+0 < k ≤ 100, 0 < n ≤ 10^6, 0 < primes[i] < 1000.
+The nth super ugly number is guaranteed to fit within a 32-bit signed integer range.
 ```
 
-#### 思路
+#### Approach
 
-这道题看似和动态求极值没关系。其实不然，让我们来分析一下这个题目。
+At first glance, this problem might not seem related to dynamically finding extreme values. However, let's analyze it more closely.
 
-我们可以实现生成超级多的丑数，比如先从小到大生成 N 个丑数，然后直接取第 N 个么？
+One approach might be to generate a very large number of ugly numbers, such as creating the first N ugly numbers in ascending order and then directly taking the Nth one.
 
-拿这道题来说， 题目有一个数据范围限制 `0 < n ≤ 10^6`，那我们是不是预先生成一个大小为 $10^6$ 的超级丑数数组，这样我们就可通过 $O(1)$ 的时间获取到第 N 个超级丑数了。
+Considering the constraints of this problem, 0 < n ≤ 10^6, should we pre-generate an array of super ugly numbers of size $10^6$? This way, we could retrieve the Nth super ugly number in $O(1)$ time.
 
-首先第一个问题就是时间和空间浪费。我们其实没有必要每次都计算所有的超级丑数，这样的预处理空间和时间都很差。
+However, there are two main issues with this approach:
 
-第二个问题是，我们如何生成 $10^6$ 以为的超级丑数呢？
+1. **Time and Space Waste**: It's unnecessary to calculate all super ugly numbers every time. Such pre-processing would be inefficient in terms of both time and space.
 
-通过丑数的定义，我们能知道超级丑数一定可以写出如下形式。
+2. **Generating Super Ugly Numbers**: How do we generate $10^6$ super ugly numbers?
+
+By understanding the definition of ugly numbers, we know that a super ugly number can definitely be written in the following form.
 
 ```
 if primes = [a,b,c,....]
