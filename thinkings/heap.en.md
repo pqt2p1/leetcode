@@ -479,6 +479,24 @@ class Solution {
 }
 ```
 
+Python code:
+```py
+class Solution:
+    def nthSuperUglyNumber(self, n, primes):
+        queue = []
+        count = 0
+        ans = 1
+        heapq.heappush(queue, ans)
+        while count < n:
+            ans = heapq.heappop(queue)
+            while queue and ans == queue[0]:
+                heapq.heappop(queue)
+            count += 1
+            for prime in primes:
+                heapq.heappush(queue, ans * prime)
+        return ans
+```
+
 > The initialization of `ans` to 1 acts like a virtual head, solely for simplifying operations.
 
 ### Summary
