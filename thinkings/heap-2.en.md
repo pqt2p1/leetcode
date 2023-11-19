@@ -575,115 +575,116 @@ class Solution:
         return l
 ```
 
-(代码 1.3.7)
+(Code 1.3.7)
 
-#### 632. 最小区间
+#### 632. Smallest Range Covering Elements from K Lists
 
-##### 题目描述
+##### Problen Description
 
 ```
-你有 k 个 非递减排列 的整数列表。找到一个 最小 区间，使得 k 个列表中的每个列表至少有一个数包含在其中。
+You have k non-decreasing sorted lists of integers. Find the smallest interval such that each of the k lists contains at least one number in this interval.
 
-我们定义如果 b-a < d-c 或者在 b-a == d-c 时 a < c，则区间 [a,b] 比 [c,d] 小。
+We define an interval [a,b] as smaller than [c,d] if b-a < d-c or when b-a == d-c if a < c.
 
- 
+Example 1:
 
-示例 1：
+Input: nums = [[4,10,15,24,26], [0,9,12,20], [5,18,22,30]]
+Output: [20,24]
+Explanation:
+List 1: [4, 10, 15, 24, 26], 24 is in the interval [20,24].
+List 2: [0, 9, 12, 20], 20 is in the interval [20,24].
+List 3: [5, 18, 22, 30], 22 is in the interval [20,24].
 
-输入：nums = [[4,10,15,24,26], [0,9,12,20], [5,18,22,30]]
-输出：[20,24]
-解释：
-列表 1：[4, 10, 15, 24, 26]，24 在区间 [20,24] 中。
-列表 2：[0, 9, 12, 20]，20 在区间 [20,24] 中。
-列表 3：[5, 18, 22, 30]，22 在区间 [20,24] 中。
-示例 2：
+Example 2:
 
-输入：nums = [[1,2,3],[1,2,3],[1,2,3]]
-输出：[1,1]
-示例 3：
+Input: nums = [[1,2,3],[1,2,3],[1,2,3]]
+Output: [1,1]
 
-输入：nums = [[10,10],[11,11]]
-输出：[10,11]
-示例 4：
+Example 3:
 
-输入：nums = [[10],[11]]
-输出：[10,11]
-示例 5：
+Input: nums = [[10,10],[11,11]]
+Output: [10,11]
 
-输入：nums = [[1],[2],[3],[4],[5],[6],[7]]
-输出：[1,7]
- 
+Example 4:
 
-提示：
+Input: nums = [[10],[11]]
+Output: [10,11]
+
+Example 5:
+
+Input: nums = [[1],[2],[3],[4],[5],[6],[7]]
+Output: [1,7]
+
+Constraints:
 
 nums.length == k
 1 <= k <= 3500
 1 <= nums[i].length <= 50
 -105 <= nums[i][j] <= 105
-nums[i] 按非递减顺序排列
+nums[i] are sorted in non-decreasing order
 
 ```
 
-##### 思路
+##### Thought Process
 
-这道题本质上就是**在 m 个一维数组中各取出一个数字，重新组成新的数组 A，使得新的数组 A 中最大值和最小值的差值（diff）最小**。
+This problem essentially involves **selecting one number from each of m one-dimensional arrays to form a new array A, aiming to minimize the difference (diff) between the maximum and minimum values in A.**
 
-这道题和上面的题目有点类似，又略有不同。这道题是一个矩阵，上面一道题是一维数组。不过我们可以将二维矩阵看出一维数组，这样我们就可以沿用上面的思路了。
+This problem is somewhat similar to the previous one, with a slight difference. Here, we deal with a matrix, whereas the previous problem was about a one-dimensional array. However, we can treat the two-dimensional matrix as a one-dimensional array, allowing us to apply the same approach as before.
 
-上面的思路 diff 最小的一定产生于排序之后相邻的元素之间。而这道题我们无法直接对二维数组进行排序，而且即使进行排序，也不好确定排序的原则。
+The key idea from the previous problems is that the smallest diff will always occur between adjacent elements after sorting. In this case, we cannot sort the two-dimensional array directly, and even if we did, it would be challenging to determine the sorting principle.
 
-我们其实可以继续使用前面两道题的思路。具体来说就是使用**小顶堆获取堆中最小值**，进而通过**一个变量记录堆中的最大值**，这样就知道了 diff，每次更新指针都会产生一个新的 diff，不断重复这个过程并维护全局最小 diff 即可。
+We can still use the approach from the previous two problems, which specifically involves using **a min-heap to get the smallest value in the heap and using a variable to record the maximum value in the heap.** This way, we know the diff, and each time we update a pointer, we generate a new diff. We repeat this process and maintain the global minimum diff.
 
-这种算法的成立的前提是 k 个列表都是升序排列的，这里需要数组升序原理和上面题目是一样的，有序之后就可以对每个列表维护一个指针，进而使用上面的思路解决。
+The prerequisite for this algorithm is that all k lists are sorted in ascending order. The reasoning for requiring ascending order is the same as in the previous problem. With sorted arrays, we can maintain a pointer for each list, which allows us to use the aforementioned approach to solve the problem.
 
-以题目中的 nums = [[1,2,3],[1,2,3],[1,2,3]] 为例：
+Taking nums = [[1,2,3],[1,2,3],[1,2,3]] from the problem as an example:
 
 - [1,2,3]
 - [1,2,3]
 - [1,2,3]
 
-我们先选取所有行的最小值，也就是 [1,1,1]，这时的 diff 为 0，全局最大值为 1，最小值也为 1。接下来，继续寻找备胎，看有没有更好的备胎供我们选择。
+First, we select the minimum value from all rows, which is [1,1,1]. Here, the diff is 0, the global maximum is 1, and the minimum is also 1. Next, we continue to look for a "backup", to see if there's a better option available.
 
-接下来的备胎可能产生于情况 1：
-
-- [**1**,2,3]
-- [**1**,2,3]
-- [1,**2**,3] 移动了这行的指针，将其从原来的 0 移动一个单位到达 1。
-
-或者情况 2：
+The next backup could result from situation 1:
 
 - [**1**,2,3]
-- [1,**2**,3]移动了这行的指针，将其从原来的 0 移动一个单位到达 1。
+- [**1**,2,3]
+- [1,**2**,3] moving the pointer of this row from 0 to 1.
+
+Or situation 2:
+
+- [**1**,2,3]
+- [1,**2**,3] moving the pointer of this row from 0 to 1.
 - [**1**,2,3]
 
 。。。
 
-这几种情况又继续分裂更多的情况，这个就和上面的题目一样了，不再赘述。
+These situations lead to even more scenarios, similar to the previous problem, and need not be repeated here.
 
-##### 代码
+##### Code
 
 ```py
 class Solution:
-    def smallestRange(self, martrix: List[List[int]]) -> List[int]:
+    def smallestRange(self, matrix: List[List[int]]) -> List[int]:
         l, r = -10**9, 10**9
-        # 将每一行最小的都放到堆中，同时记录其所在的行号和列号，一共 n 个齐头并进
-        h = [(row[0], i, 0) for i, row in enumerate(martrix)]
+        # Put the smallest element of each row into the heap, along with its row and column number, a total of n elements advancing together
+        h = [(row[0], i, 0) for i, row in enumerate(matrix)]
         heapq.heapify(h)
-        # 维护最大值
-        max_v = max(row[0] for row in martrix)
+        # Maintain the maximum value
+        max_v = max(row[0] for row in matrix)
 
         while True:
             min_v, row, col = heapq.heappop(h)
-            # max_v - min_v 是当前的最大最小差值， r - l 为全局的最大最小差值。因为如果当前的更小，我们就更新全局结果
+            # max_v - min_v is the current maximum-minimum difference, r - l is the global maximum-minimum difference. We update the global result if the current is smaller
             if max_v - min_v < r - l:
                 l, r = min_v, max_v
-            if col == len(martrix[row]) - 1: return [l, r]
-            # 更新指针，继续往后移动一位
-            heapq.heappush(h, (martrix[row][col + 1], row, col + 1))
-            max_v = max(max_v, martrix[row][col + 1])
+            if col == len(matrix[row]) - 1: return [l, r]
+            # Update the pointer, move one position forward
+            heapq.heappush(h, (matrix[row][col + 1], row, col + 1))
+            max_v = max(max_v, matrix[row][col + 1])
 ```
 
-(代码 1.3.8)
+(Code 1.3.8)
 
 #### 1675. 数组的最小偏移量
 
