@@ -693,8 +693,6 @@ class Solution:
 ```
 You are given an array nums consisting of n positive integers. You can perform any number of two types of operations on any element of the array:
 
-你可以对数组的任意元素执行任意次数的两类操作：
-
 1. If the element is even, divide it by 2.
     For example, if the array is [1,2,3,4], you can perform this operation on the last element to make it [1,2,3,2].
 2. If the element is odd, multiply it by 2.
@@ -722,13 +720,6 @@ Constraints:
 n == nums.length
 2 <= n <= 105
 1 <= nums[i] <= 109
-
-提示：
-
-n == nums.length
-2 <= n <= 105
-1 <= nums[i] <= 109
-```
 
 ##### Idea
 
