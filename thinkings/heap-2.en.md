@@ -24,7 +24,9 @@ Hello everyone, this is lucifer. What I bring to you today is the topic of "Heap
 
 This series contains the following topics：
 
--[I have almost finished swiping all the linked topics of Lixu, and I found these things. 。 。 ](https://lucifer. ren/blog/2020/11/08/linked-list/) -[After almost brushing all the tree questions of Li Buckle, I found these things. 。 。 ](https://lucifer. ren/blog/2020/11/23/tree/) -[After almost brushing all the piles of questions, I found these things. 。 。 (First bullet)](https://lucifer . ren/blog/2020/12/26/heap/)
+-[I have almost finished swiping all the linked topics of Lixu, and I found these things. 。 。 ](https://lucifer.ren/blog/2020/11/08/linked-list/) 
+-[After almost brushing all the tree questions of Li Buckle, I found these things. 。 。 ](https://lucifer.ren/blog/2020/11/23/tree/) 
+-[After almost brushing all the piles of questions, I found these things. 。 。 (First bullet)](https://lucifer.ren/blog/2020/12/26/heap/)
 
 <! -- more -->
 
