@@ -686,37 +686,42 @@ class Solution:
 
 (Code 1.3.8)
 
-#### 1675. 数组的最小偏移量
+#### 1675: Minimum Deviation in Array
 
-##### 题目描述
+##### Problem Description
 
 ```
-给你一个由 n 个正整数组成的数组 nums 。
+You are given an array nums consisting of n positive integers. You can perform any number of two types of operations on any element of the array:
 
 你可以对数组的任意元素执行任意次数的两类操作：
 
-如果元素是 偶数 ，除以 2
-例如，如果数组是 [1,2,3,4] ，那么你可以对最后一个元素执行此操作，使其变成 [1,2,3,2]
-如果元素是 奇数 ，乘上 2
-例如，如果数组是 [1,2,3,4] ，那么你可以对第一个元素执行此操作，使其变成 [2,2,3,4]
-数组的 偏移量 是数组中任意两个元素之间的 最大差值 。
+1. If the element is even, divide it by 2.
+    For example, if the array is [1,2,3,4], you can perform this operation on the last element to make it [1,2,3,2].
+2. If the element is odd, multiply it by 2.
+    For example, if the array is [1,2,3,4], you can perform this operation on the first element to make it [2,2,3,4].
 
-返回数组在执行某些操作之后可以拥有的 最小偏移量 。
+The deviation of the array is the maximum difference between any two elements in the array.
 
-示例 1：
+**Goal**: Return the minimum deviation the array can have after performing some operations.
 
-输入：nums = [1,2,3,4]
-输出：1
-解释：你可以将数组转换为 [1,2,3,2]，然后转换成 [2,2,3,2]，偏移量是 3 - 2 = 1
-示例 2：
+Examples:
 
-输入：nums = [4,1,5,20,3]
-输出：3
-解释：两次操作后，你可以将数组转换为 [4,2,5,5,3]，偏移量是 5 - 2 = 3
-示例 3：
+Input: nums = [1,2,3,4]
+Output: 1
+Explanation: You can transform the array to [1,2,3,2], then to [2,2,3,2]. The deviation is 3 - 2 = 1.
 
-输入：nums = [2,10,8]
-输出：3
+Input: nums = [4,1,5,20,3]
+Output: 3
+Explanation: After two operations, you can transform the array to [4,2,5,5,3]. The deviation is 5 - 2 = 3.
+
+Input: nums = [2,10,8]
+Output: 3
+
+Constraints:
+
+n == nums.length
+2 <= n <= 105
+1 <= nums[i] <= 109
 
 提示：
 
@@ -725,49 +730,50 @@ n == nums.length
 1 <= nums[i] <= 109
 ```
 
-##### 思路
+##### Idea
 
-题目说可对数组中每一项都执行任意次操作，但其实操作是有限的。
+The problem allows arbitrary numbers of operations on each element of the array, but in reality, the operations are limited:
 
-- 我们只能对奇数进行一次 2 倍操作，因为 2 倍之后其就变成了偶数了。
-- 我们可以对偶数进行若干次除 2 操作，直到等于一个奇数，不难看出这也是一个有限次的操作。
+- You can only perform the multiplication by 2 on odd numbers once, as it becomes even after the operation.
+- You can divide even numbers by 2 several times until it becomes an odd number. This is also a finite number of operations.
 
-以题目中的 [1,2,3,4] 来说。我们可以：
+Take [1,2,3,4] as an example. You can:
 
-- 将 1 变成 2（也可以不变）
-- 将 2 变成 1（也可以不变）
-- 将 3 变成 6（也可以不变）
-- 将 4 变成 2 或 1（也可以不变）
+- Change 1 to 2 (or leave it as is)
+- Change 2 to 1 (or leave it as is)
+- Change 3 to 6 (or leave it as is)
+- Change 4 to 2 or 1 (or leave it as is)
 
-用图来表示就是下面这样的：
+Represented graphically, this is:
 
-![一维数组转二维数组](https://p.ipic.vip/9pcj1q.jpg)
+[Convert one-dimensional array to a two-dimensional array](https://p.ipic.vip/9pcj1q.jpg)
 
-这不就相当于: 从 [[1,2], [1,2], [3,6], [1,2,4]] 这样的一个二维数组中的每一行分别选取一个数，并使得其差最小么？这难道不是和上面的题目一模一样么？
+Isn't this the same as selecting a number from each row of a two-dimensional array like [[1,2], [1,2], [3,6], [1,2,4]] and minimizing their difference? Isn't this exactly like the previous problem?
 
-这里我直接将上面的题目解法封装成了一个 api 调用了，具体看代码。
+Here, I have encapsulated the solution of the previous problem into an API call, as detailed in the code.
 
-##### 代码
+##### Code
 
 ```py
 class Solution:
-    def smallestRange(self, martrix: List[List[int]]) -> List[int]:
+    def smallestRange(self, matrix: List[List[int]]) -> List[int]:
         l, r = -10**9, 10**9
-        # 将每一行最小的都放到堆中，同时记录其所在的行号和列号，一共 n 个齐头并进
-        h = [(row[0], i, 0) for i, row in enumerate(martrix)]
+        # Put the smallest element of each row into the heap, along with its row and column number, a total of n elements advancing together
+        h = [(row[0], i, 0) for i, row in enumerate(matrix)]
         heapq.heapify(h)
-        # 维护最大值
-        max_v = max(row[0] for row in martrix)
+        # Maintain the maximum value
+        max_v = max(row[0] for row in matrix)
 
         while True:
             min_v, row, col = heapq.heappop(h)
-            # max_v - min_v 是当前的最大最小差值， r - l 为全局的最大最小差值。因为如果当前的更小，我们就更新全局结果
+            # max_v - min_v is the current maximum-minimum difference, r - l is the global maximum-minimum difference. We update the global result if the current is smaller
             if max_v - min_v < r - l:
                 l, r = min_v, max_v
-            if col == len(martrix[row]) - 1: return [l, r]
-            # 更新指针，继续往后移动一位
-            heapq.heappush(h, (martrix[row][col + 1], row, col + 1))
-            max_v = max(max_v, martrix[row][col + 1])
+            if col == len(matrix[row]) - 1: return [l, r]
+            # Update the pointer, move one position forward
+            heapq.heappush(h, (matrix[row][col + 1], row, col + 1))
+            max_v = max(max_v, matrix[row][col + 1])
+
     def minimumDeviation(self, nums: List[int]) -> int:
         matrix = [[] for _ in range(len(nums))]
         for i, num in enumerate(nums):
@@ -782,63 +788,64 @@ class Solution:
                 matrix[i] += temp[::-1]
         a, b = self.smallestRange(matrix)
         return b - a
-
 ```
 
-(代码 1.3.9)
+(Code 1.3.9)
 
-### 技巧三 - 事后小诸葛
+### Technique Three - Hindsight is 20/20
 
 ![](https://p.ipic.vip/aqqg1v.jpg)
 
-这个技巧指的是：当从左到右遍历的时候，我们是不知道右边是什么的，需要等到你到了右边之后才知道。
+This technique refers to the fact that when we traverse from left to right, we do not know what is on the right until we get there.
 
-如果想知道右边是什么，一种简单的方式是遍历两次，第一次遍历将数据记录下来，当第二次遍历的时候，用上次遍历记录的数据。这是我们使用最多的方式。不过有时候，我们也可以在遍历到指定元素后，往前回溯，这样就可以边遍历边存储，使用一次遍历即可。具体来说就是将从左到右的数据全部收集起来，等到需要用的时候，从里面挑一个用。如果我们都要取最大值或者最小值且极值会发生变动， 就可**使用堆加速**。直观上就是使用了时光机回到之前，达到了事后诸葛亮的目的。
+If you want to know what's on the right, a simple way is to traverse twice: record the data during the first traversal, and use the recorded data in the second traversal. This is the most commonly used method. However, sometimes we can backtrack after reaching a certain element, allowing us to collect data while traversing and complete the process in a single traversal. Specifically, it means collecting all data from left to right, and when needed, picking one from the collection. If we always need to take the maximum or minimum value and these extreme values change, **using a heap can speed up the process**. Intuitively, it's like using a time machine to go back to the past, achieving the effect of being wise after the event.
 
-这样说**你肯定不明白啥意思**。没关系，我们通过几个例子来讲一下。当你看完这些例子之后，再回头看这句话。
+You might not understand what this means right now. No worries, let's clarify this through a few examples. After you have seen these examples, look back at this statement.
 
-#### 871. 最低加油次数
+#### 871. Minimum Number of Refueling Stops
 
-##### 题目描述
+##### Problem Description
 
 ```
-汽车从起点出发驶向目的地，该目的地位于出发位置东面 target 英里处。
+A car travels from a starting position to a destination which is target miles east of the starting position.
 
-沿途有加油站，每个 station[i] 代表一个加油站，它位于出发位置东面 station[i][0] 英里处，并且有 station[i][1] 升汽油。
+There are gas stations along the way. Each station[i] represents a gas station; it is located station[i][0] miles east of the starting position and has station[i][1] gallons of gas.
 
-假设汽车油箱的容量是无限的，其中最初有 startFuel 升燃料。它每行驶 1 英里就会用掉 1 升汽油。
+Assume the car's fuel tank is unlimited, and initially, it has startFuel gallons of fuel. It uses up 1 gallon of fuel per mile.
 
-当汽车到达加油站时，它可能停下来加油，将所有汽油从加油站转移到汽车中。
+When the car reaches a gas station, it may stop to refuel, transferring all the gas from the station to the car.
 
-为了到达目的地，汽车所必要的最低加油次数是多少？如果无法到达目的地，则返回 -1 。
+What is the minimum number of refueling stops the car must make to reach its destination? If it is impossible to reach the destination, return -1.
 
-注意：如果汽车到达加油站时剩余燃料为 0，它仍然可以在那里加油。如果汽车到达目的地时剩余燃料为 0，仍然认为它已经到达目的地。
+Note: If the car reaches a gas station with 0 remaining fuel, it can still refuel there. If the car reaches the destination with 0 remaining fuel, it is still considered to have reached the destination.
 
  
 
-示例 1：
+Example 1:
 
-输入：target = 1, startFuel = 1, stations = []
-输出：0
-解释：我们可以在不加油的情况下到达目的地。
-示例 2：
+Input: target = 1, startFuel = 1, stations = []
+Output: 0
+Explanation: We can reach the destination without refueling.
 
-输入：target = 100, startFuel = 1, stations = [[10,100]]
-输出：-1
-解释：我们无法抵达目的地，甚至无法到达第一个加油站。
-示例 3：
+Example 2:
 
-输入：target = 100, startFuel = 10, stations = [[10,60],[20,30],[30,30],[60,40]]
-输出：2
-解释：
-我们出发时有 10 升燃料。
-我们开车来到距起点 10 英里处的加油站，消耗 10 升燃料。将汽油从 0 升加到 60 升。
-然后，我们从 10 英里处的加油站开到 60 英里处的加油站（消耗 50 升燃料），
-并将汽油从 10 升加到 50 升。然后我们开车抵达目的地。
-我们沿途在1两个加油站停靠，所以返回 2 。
+Input: target = 100, startFuel = 1, stations = [[10,100]]
+Output: -1
+Explanation: We cannot reach the destination, not even the first gas station.
+
+Example 3:
+
+Input: target = 100, startFuel = 10, stations = [[10,60],[20,30],[30,30],[60,40]]
+Output: 2
+Explanation:
+We start with 10 gallons of fuel.
+We drive to the gas station at 10 miles, using up 10 gallons of fuel. Refuel from 0 to 60 gallons.
+Then, we drive from the gas station at 10 miles to the one at 60 miles (using up 50 gallons),
+and refuel from 10 to 50 gallons. Then we drive to the destination.
+We stop at two gas stations along the way, so we return 2.
  
 
-提示：
+Constraints:
 
 1 <= target, startFuel, stations[i][1] <= 10^9
 0 <= stations.length <= 500
@@ -846,43 +853,43 @@ class Solution:
 
 ```
 
-##### 思路
+##### Idea
 
-为了能够获得**最低加油次数**，我们肯定希望能不加油就不加油。那什么时候必须加油呢？答案应该是**如果你不加油，就无法到达下一个目的地的时候**。
+To achieve the **minimum number of refueling stops**, we naturally want to avoid refueling unless absolutely necessary. So, **when is it essential to refuel? The answer should be when you can't reach the next destination without refueling.**
 
-伪代码描述就是：
+The pseudocode description is as follows:
 
 ```py
-cur = startFuel # 刚开始有 startFuel 升汽油
-last = 0 # 上一次的位置
+cur = startFuel # Starting with startFuel gallons of fuel
+last = 0 # The position of the last station
 for i, fuel in stations:
-    cur -= i - last # 走过两个 staton 的耗油为两个 station 的距离，也就是 i - last
+    cur -= i - last # The fuel consumption between two stations is their distance, i.e., i - last
     if cur < 0:
-        # 我们必须在前面就加油，否则到不了这里
-        # 但是在前面的哪个 station 加油呢？
-        # 直觉告诉我们应该贪心地选择可以加汽油最多的站 i，如果加上 i 的汽油还是 cur < 0，继续加次大的站 j，直到没有更多汽油可加或者 cur > 0
+        # We must have refueled before this point, otherwise we can't reach here
+        # But at which station should we refuel?
+        # Intuition tells us to greedily choose the station i that offers the most fuel, and if adding fuel from i still makes cur < 0, continue adding from the second-largest station j until no more fuel can be added or cur > 0
 ```
 
-上面说了要选择可以加汽油最多的站 i，如果加了油还不行，继续选择第二多的站。这种动态求极值的场景非常适合使用 heap。
+As mentioned above, we should choose the station i that offers the most fuel, and if that's not enough, continue with the second-largest station. This dynamic extreme value scenario is very suitable for using a heap.
 
-具体来说就是：
+Specifically, the process is:
 
-- 每经过一个站，就将其油量加到堆。
-- 尽可能往前开，油只要不小于 0 就继续开。
-- 如果油量小于 0 ，就从堆中取最大的加到油箱中去，如果油量还是小于 0 继续重复取堆中的最大油量。
-- 如果加完油之后油量大于 0 ，继续开，重复上面的步骤。否则返回 -1，表示无法到达目的地。
+- Add the fuel amount of each station to the heap as you pass by.
+- Drive as far as possible, continuing as long as the fuel is not below 0.
+- If the fuel level falls below 0, take the largest amount of fuel from the heap and add it to the fuel tank. Repeat this process if the fuel level is still below 0.
+- If, after refueling, the fuel level is above 0, continue driving and repeat the steps above. Otherwise, return -1, indicating that it is impossible to reach the destination.
 
-那这个算法是如何体现**事后小诸葛**的呢？你可以把自己代入到题目中进行模拟。 把自己想象成正在开车，你的目标就是题目中的要求：**最少加油次数**。当你开到一个站的时候，你是不知道你的油量够不够支撑到下个站的，并且就算撑不到下个站，其实也许在上个站加油会更好。所以**现实中**你无论如何都**无法知道在当前站，我是应该加油还是不加油的**，因为信息太少了。
+How does this algorithm embody the concept of "Hindsight is 20/20"? Imagine yourself in the scenario of the problem. Think of yourself as driving a car, with your goal being the requirement of the problem: **minimum number of refueling stops**. When you arrive at a station, you don't know if your fuel will be enough to reach the next station, and even if it's not enough, maybe it would have been better to refuel at the previous station. So **in reality** you can never know **whether you should refuel at the current station or not** because there's too little information.
 
 ![](https://p.ipic.vip/tygyyh.jpg)
 
-那我会怎么做呢？如果是我在开车的话，我只能每次都加油，这样都无法到达目的地，那肯定就无法到达目的地了。但如果这样可以到达目的地，我就可以说**如果我们在那个站加油，这个站选择不加就可以最少加油次数到达目的地了**。你怎么不早说呢？ 这不就是事后诸葛亮么？
+What would I do in this situation? If I were driving, I would have to refuel every time. If I still can't reach the destination, then it's definitely impossible to reach it. But if this allows me to reach the destination, I can then say, "If we had refueled at that station, and chose not to refuel at this one, we could have reached the destination with the minimum number of refuels." Why didn't you say that earlier? Isn't this exactly hindsight?
 
-这个事后诸葛亮体现在**我们是等到没油了才去想应该在之前的某个站加油**。
+This "hindsight" is reflected in **the fact that we only think about refueling at a previous station when we run out of fuel.**
 
-所以这个事后诸葛亮本质上解决的是，基于当前信息无法获取最优解，我们必须掌握全部信息之后回溯。以这道题来说，我们可以先遍历一边 station，然后将每个 station 的油量记录到一个数组中，每次我们“预见“到无法到达下个站的时候，就从这个数组中取最大的。。。。 基于此，我们可以考虑使用堆优化取极值的过程，而不是使用数组的方式。
+So, the essence of this "Hindsight is 20/20" is solving the problem where you cannot get the best solution with the current information, and you must have all the information to backtrack. For this problem, we can first traverse through the stations, then record each station's fuel amount in an array. Every time we "foresee" that we can't reach the next station, we take the largest amount from this array... Based on this, we can consider using a heap to optimize the process of finding the extreme value, instead of using an array.
 
-##### 代码
+##### Code
 
 ```py
 class Solution:
@@ -900,105 +907,104 @@ class Solution:
                 ans += 1
             if cur < 0:
                 return -1
-            heappush(h, -fuel)
+            heapq.heappush(h, -fuel)
 
             last = i
         return ans
 ```
 
-(代码 1.3.10)
+(Code 1.3.10)
 
-#### 1488. 避免洪水泛滥
+#### 1488. Avoid Flood in The City
 
-##### 题目描述
+##### Problem Description
 
 ```
-你的国家有无数个湖泊，所有湖泊一开始都是空的。当第 n 个湖泊下雨的时候，如果第 n 个湖泊是空的，那么它就会装满水，否则这个湖泊会发生洪水。你的目标是避免任意一个湖泊发生洪水。
+Your country has an infinite number of lakes, all initially empty. When it rains over the n-th lake, if the n-th lake is empty, it will fill up with water; otherwise, the lake will flood. Your goal is to avoid flooding in any of the lakes.
 
-给你一个整数数组 rains ，其中：
+Given an integer array rains where:
+- rains[i] > 0 indicates that on day i, it will rain over the rains[i]-th lake.
+- rains[i] == 0 indicates that on day i, no lakes will receive rain, and you can choose to drain one lake of water.
 
-rains[i] > 0 表示第 i 天时，第 rains[i] 个湖泊会下雨。
-rains[i] == 0 表示第 i 天没有湖泊会下雨，你可以选择 一个 湖泊并 抽干 这个湖泊的水。
-请返回一个数组 ans ，满足：
+Return an array ans that satisfies:
+- ans.length == rains.length
+- If rains[i] > 0, then ans[i] == -1.
+- If rains[i] == 0, ans[i] is the lake you choose to drain on day i.
+- If there are multiple valid solutions, return any of them. If it’s impossible to avoid flood, return an empty array.
 
-ans.length == rains.length
-如果 rains[i] > 0 ，那么ans[i] == -1 。
-如果 rains[i] == 0 ，ans[i] 是你第 i 天选择抽干的湖泊。
-如果有多种可行解，请返回它们中的 任意一个 。如果没办法阻止洪水，请返回一个 空的数组 。
-
-请注意，如果你选择抽干一个装满水的湖泊，它会变成一个空的湖泊。但如果你选择抽干一个空的湖泊，那么将无事发生（详情请看示例 4）。
+Note that if you choose to drain a full lake, it becomes empty. But if you choose to drain an empty lake, nothing happens (see example 4).
 
  
 
-示例 1：
+Example 1:
 
-输入：rains = [1,2,3,4]
-输出：[-1,-1,-1,-1]
-解释：第一天后，装满水的湖泊包括 [1]
-第二天后，装满水的湖泊包括 [1,2]
-第三天后，装满水的湖泊包括 [1,2,3]
-第四天后，装满水的湖泊包括 [1,2,3,4]
-没有哪一天你可以抽干任何湖泊的水，也没有湖泊会发生洪水。
-示例 2：
+Input: rains = [1,2,3,4]
+Output: [-1,-1,-1,-1]
+Explanation: After the first day, the full lakes include [1]
+After the second day, the full lakes include [1,2]
+After the third day, the full lakes include [1,2,3]
+After the fourth day, the full lakes include [1,2,3,4]
+There’s no day when you can drain any lake, and no lakes will flood.
+Example 2:
 
-输入：rains = [1,2,0,0,2,1]
-输出：[-1,-1,2,1,-1,-1]
-解释：第一天后，装满水的湖泊包括 [1]
-第二天后，装满水的湖泊包括 [1,2]
-第三天后，我们抽干湖泊 2 。所以剩下装满水的湖泊包括 [1]
-第四天后，我们抽干湖泊 1 。所以暂时没有装满水的湖泊了。
-第五天后，装满水的湖泊包括 [2]。
-第六天后，装满水的湖泊包括 [1,2]。
-可以看出，这个方案下不会有洪水发生。同时， [-1,-1,1,2,-1,-1] 也是另一个可行的没有洪水的方案。
-示例 3：
+Input: rains = [1,2,0,0,2,1]
+Output: [-1,-1,2,1,-1,-1]
+Explanation: After the first day, the full lakes include [1]
+After the second day, the full lakes include [1,2]
+On the third day, we drain lake 2. So the remaining full lakes include [1]
+On the fourth day, we drain lake 1. So temporarily there are no full lakes.
+After the fifth day, the full lakes include [2].
+After the sixth day, the full lakes include [1,2].
+It can be seen that in this scheme, no flood will occur. [-1,-1,1,2,-1,-1] is also another feasible scheme with no flood.
+Example 3:
 
-输入：rains = [1,2,0,1,2]
-输出：[]
-解释：第二天后，装满水的湖泊包括 [1,2]。我们可以在第三天抽干一个湖泊的水。
-但第三天后，湖泊 1 和 2 都会再次下雨，所以不管我们第三天抽干哪个湖泊的水，另一个湖泊都会发生洪水。
-示例 4：
+Input: rains = [1,2,0,1,2]
+Output: []
+Explanation: After the second day, the full lakes include [1,2]. We can drain a lake on the third day.
+But after the third day, lakes 1 and 2 will both receive rain again, so no matter which lake we drain on the third day, the other lake will flood.
+Example 4:
 
-输入：rains = [69,0,0,0,69]
-输出：[-1,69,1,1,-1]
-解释：任何形如 [-1,69,x,y,-1], [-1,x,69,y,-1] 或者 [-1,x,y,69,-1] 都是可行的解，其中 1 <= x,y <= 10^9
-示例 5：
+Input: rains = [69,0,0,0,69]
+Output: [-1,69,1,1,-1]
+Explanation: Any form like [-1,69,x,y,-1], [-1,x,69,y,-1] or [-1,x,y,69,-1] where 1 <= x,y <= 10^9 is a feasible solution.
+Example 5:
 
-输入：rains = [10,20,20]
-输出：[]
-解释：由于湖泊 20 会连续下 2 天的雨，所以没有没有办法阻止洪水。
+Input: rains = [10,20,20]
+Output: []
+Explanation: Since lake 20 will receive rain for 2 consecutive days, there’s no way to prevent the flood.
  
 
-提示：
+Constraints:
 
 1 <= rains.length <= 10^5
 0 <= rains[i] <= 10^9
 
 ```
 
-##### 思路
+##### Idea
 
-如果上面的题用**事后诸葛亮**描述比较牵强的话，那后面这两个题可以说很适合了。
+If using **"Hindsight is 20/20**" to describe the above problem seems a bit far-fetched, then the next two problems are very suitable.
 
-题目说明了我们可以在不下雨的时候抽干一个湖泊，如果有多个下满雨的湖泊，我们该抽干哪个湖呢？显然应该是抽干最近即将被洪水淹没的湖。但是现实中无论如何我们都不可能知道未来哪天哪个湖泊会下雨的，即使有天气预报也不行，因此它也不 100% 可靠。
+The problem states we can drain a lake when it's not raining. If multiple lakes are full, which one should we drain? Obviously, it should be the lake that is closest to being flooded. However, in reality, we can never know in advance which lake will receive rain on which day, not even with weather forecasts, as they are not 100% reliable.
 
-但是代码可以啊。我们可以先遍历一遍 rain 数组就知道第几天哪个湖泊下雨了。有了这个信息，我们就可以事后诸葛亮了。
+But code can do this. We can first traverse the rain array to know which lake receives rain on which day. With this information, we can then use hindsight.
 
-“今天天气很好，我开了天眼，明天湖泊 2 会被洪水淹没，我们今天就先抽干它，否则就洪水泛滥了。”。
+“Today is a good day, I have opened my third eye, and tomorrow Lake 2 will be flooded, so let's drain it today, otherwise, it will overflow”
 
 ![](https://p.ipic.vip/ztgz23.jpg)
 
-和上面的题目一样，我们也可以不先遍历 rain 数组，再模拟每天的变化，而是直接模拟，即使当前是晴天我们也不抽干任何湖泊。接着在模拟的过程**记录晴天的情况**，等到洪水发生的时候，我们再考虑前面**哪一个晴天**应该抽干哪个湖泊。因此这个事后诸葛亮体现在**我们是等到洪水泛滥了才去想应该在之前的某天采取什么手段**。
+Like the previous problem, we can also simulate each day's changes without first traversing the rain array. Even if the current day is sunny, we do not drain any lakes. During the simulation, we record sunny days and when a flood is imminent, we consider which sunny day should be used to drain which lake. Thus, this "Hindsight is 20/20" is manifested in waiting until a flood is imminent to consider what measures should have been taken on a previous day.
 
-算法：
+Algorithm：
 
-- 遍历 rain， 模拟每天的变化
-- 如果 rain 当前是 0 表示当前是晴天，我们不抽干任何湖泊。但是我们将当前天记录到 sunny 数组。
-- 如果 rain 大于 0，说明有一个湖泊下雨了，我们去看下下雨的这个湖泊是否发生了洪水泛滥。其实就是看下下雨前是否已经有水了。这提示我们用一个数据结构 lakes 记录每个湖泊的情况，我们可以用 0 表示没有水，1 表示有水。这样当湖泊 i 下雨的时候且 lakes[i] = 1 就会发生洪水泛滥。
-- 如果当前湖泊发生了洪水泛滥，那么就去 sunny 数组找一个晴天去抽干它，这样它就不会洪水泛滥，接下来只需要保持 lakes[i] = 1 即可。
+- Traverse `rain`, simulating each day's changes.
+- If the current `rain` is 0, it means it's a sunny day, and we don't drain any lakes. But we record the current day in the `sunny` array.
+- If `rain` is greater than 0, it indicates a lake is receiving rain. We check if this lake is about to flood. Essentially, we see if the lake had water before the rain. This suggests using a data structure lakes to record the status of each lake, where we can use 0 to indicate no water and 1 for water. So when `lake` i receives rain and `lakes[i] = 1`, a flood will occur.
+- If the current lake is about to flood, we find a sunny day from the `sunny` array to drain it. This prevents it from flooding, and we just need to maintain `lakes[i] = 1` thereafter.
 
-这道题没有使用到堆，我是故意的。之所以这么做，是让大家明白**事后诸葛亮**这个技巧并不是堆特有的，实际上这就是一种普通的算法思想，就好像从后往前遍历一样。只不过，很多时候，我们**事后诸葛亮**的场景，需要动态取最大最小值， 这个时候就应该考虑使用堆了，这其实又回到文章开头的**一个中心**了，所以大家一定要灵活使用这些技巧，不可生搬硬套。
+This problem does not use a heap intentionally. The reason for this is to make it clear that "Hindsight is 20/20" is not exclusive to heaps. In fact, it's a common algorithmic thought process, similar to traversing from back to front. However, in many "Hindsight is 20/20" scenarios, we need to dynamically find the maximum and minimum values, and this is when we should consider using a heap. This goes back to the "central idea" at the beginning of the article, so it's important to use these techniques flexibly and not rigidly.
 
-下一道题是一个不折不扣的**事后诸葛亮** + **堆优化**的题目。
+The next problem is a true "Hindsight is 20/20" + "Heap Optimization" scenario.
 
 ##### 代码
 
@@ -1022,13 +1028,14 @@ class Solution:
         return ans
 ```
 
-(代码 1.3.11)
+(Code 1.3.11)
 
-2021-04-06 fixed: 上面的代码有问题。错误的原因在于上述算法**如果当前湖泊发生了洪水泛滥，那么就去 sunny 数组找一个晴天去抽干它，这样它就不会洪水泛滥**部分的实现不对。sunny 数组找一个晴天去抽干它的根本前提是 **出现晴天的时候湖泊里面要有水才能抽**，如果晴天的时候，湖泊里面没有水也不行。这提示我们的 lakes 不存储 0 和 1 ，而是存储发生洪水是第几天。这样问题就变为**在 sunny 中找一个日期大于 lakes[rain-1]** 的项，并将其移除 sunny 数组。由于 sunny 数组是有序的，因此我们可以使用二分来进行查找。
+The code above has an issue. The problem lies in the implementation of the algorithm's part where **if the current lake is about to flood, then find a sunny day from the sunny array to drain it, preventing the flood**. The fundamental premise for choosing a sunny day to drain the lake from the sunny array is that **there must be water in the lake on the sunny day to drain**. If the lake is empty on a sunny day, draining it is not feasible. This suggests that our lakes array should not store 0 and 1, but rather the day on which a flood occurs. This turns the problem into **finding an item in sunny with a date greater than lakes[rain-1]** and then removing it from the sunny array. Since the sunny array is ordered, we can use binary search for this purpose.
 
-> 由于我们需要删除 sunny 数组的项，因此时间复杂度不会因为使用了二分而降低。
+> However, since we need to delete items from the `sunny` array, the time complexity will not be reduced by using binary search.
 
-正确的代码应该为：
+
+The correct code should be:
 
 ```py
 class Solution:
