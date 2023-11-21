@@ -720,6 +720,7 @@ Constraints:
 n == nums.length
 2 <= n <= 105
 1 <= nums[i] <= 109
+```
 
 ##### Idea
 
