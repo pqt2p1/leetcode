@@ -1,13 +1,35 @@
-# Algorithm Topic
+# Algorithm Topics
 
-The following are some types of questions that I have summarized. Understanding these things in advance is very helpful for future questions. It is strongly recommended to master them first. In addition, my 91-day learning algorithm has also organized the topic at a more granular level. For example, [91-day Learning Algorithm](. . /91/Readme. md)
+Below are some types of problems I have summarized. Understanding these in advance is very helpful for later problem-solving, and I strongly recommend mastering them first. Additionally, my 91-day algorithm study further organizes these topics into finer details, see [91-day algorithm](../91/README.md) study for specifics
 
-First of all, everyone must master the basic data structure, and secondly, the violent method. Brute force is also an algorithm, but what we are pursuing is definitely an algorithm with better performance. Therefore, it is important to understand the algorithm bottleneck of brute force and the characteristics of various data structures, so that you can use this knowledge to approach the optimal solution step by step.
+Firstly, mastering the basic data structures is essential, followed by the brute force method. The brute force method is also an algorithm, but we are certainly seeking algorithms with better performance. Therefore, understanding the bottlenecks of brute force methods and the characteristics of various data structures is important, as this knowledge allows you to gradually approach the optimal solution.
 
-Then there are the algorithms that must be mastered. For example, the search algorithm must be mastered. The scope of the search algorithm is very wide, but the core is search. The different algorithms are different in the way of search. The typical one is BFS and DFS. Of course, the binary method is essentially a search algorithm.
+Next, there are algorithms that you must master. For example, search algorithms are essential. The scope of search algorithms is broad, but the core is searching. Different algorithms vary in their search methods, with BFS (Breadth-First Search) and DFS (Depth-First Search) being typical examples. Of course, binary search is also fundamentally a search algorithm.
 
-There is also the violent optimization method that must be mastered. Like search, it has a wide range. There are pruning, space for time, etc. Among them, there are many space-for-time changes, such as hash tables, prefix trees, and so on.
+Additionally, mastering methods to optimize brute force is also essential, and like searching, the scope is broad. This includes techniques like pruning, and space-time trade-offs, among others. Within the space-time trade-offs, there are many methods, such as hash tables and prefix trees, etc.
 
-If you study around this idea, it won't be too bad. I won't say much about the others. Everyone will slowly appreciate it.
+Embracing this mindset in your study won't lead you far astray. I won't say more; everyone can gradually appreciate it on their own.
 
--[Data cable](basic-data-structure.en.md) -[acyl](linked-list.en.md) -[Tree topic](tree.en.md) -[Top(top)](heap.en.md) -[Next)](heap-2.en.md) -[Abne four points (wish)](binary-search-1.en.md) -[Twenty-four points (Part 2)](binary-search-2.en.md) -[Supernova](binary-tree-traversal.en.md) -[Dynamic](dynamic-programming.en.md) -[backtracking](backtrack.en.md) (Occupation)run-length-encode-and-huffman-encode.en.md) -[bloom filter](bloom filter. md) -[Prefix tree(trie. md) -[My vocational class](https://lucifer.ren/blog/2020/02/03/leetcode-%E6%88%91%E7%9A%84%E6%97%A5%E7%A8%8B%E5%AE%89%E6%8E%92%E8%A1%A8%E7%B3%BB%E5%88%97/) -[Structure 2]([https://lucifer . . . Ren/Blog/2020/02/08/ %E6%9E%84%E9%80%A0%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%93%E9%A2%98/](https://lucifer.ren/blog/2020/02/08/%E6%9E%84%E9%80%A0%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%93%E9%A2%98/)) -[Stressful pressure (pressure + pressure)](slide-window.en.md) -[Recruitment position](bit.en.md) -[Island problem](island. md) -[Journey of Wisdom](GCD.en.md) -[Union](union-find.en.md) -[Second](balanced-tree.en.md) -[One pumping](reservoid-sampling.en.md) -[single](monotone-stack.en.md)
+- [Data Structure Overview](basic-data-structure.md)
+- [Linked List Topics](linked-list.md)
+- [Tree Topics](tree.md)
+- [Heap Topics (Part 1)](heap.md)
+- [Heap Topics (Part 2)](heap-2.md)
+- [Binary Topics (Part 1)](binary-search-1.md)
+- [Binary Topics (Part 2)](binary-search-2.md)
+- [Traversal of Binary Trees](binary-tree-traversal.md)
+- [Dynamic Programming](dynamic-programming.md)
+- [Backtracking](backtrack.md)
+- [Huffman Coding and Run-Length Encoding](run-length-encode-and-huffman-encode.md)
+- [Bloom Filters](bloom-filter.md)🖊
+- [Prefix Trees](trie.md)🖊
+- ["Scheduling" Topics](https://lucifer.ren/blog/2020/02/03/leetcode-%E6%88%91%E7%9A%84%E6%97%A5%E7%A8%8B%E5%AE%89%E6%8E%92%E8%A1%A8%E7%B3%BB%E5%88%97/)
+- ["Constructing Binary Trees" Topics](https://lucifer.ren/blog/2020/02/08/%E6%9E%84%E9%80%A0%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%93%E9%A2%98/)
+- [Sliding Window (Concepts + Template)](slide-window.md)
+- [Bit Manipulation](bit.md)
+- [Small Island Problem](island.md)🖊
+- [Greatest Common Divisor](GCD.md)
+- [Union-Find](union-find.md)
+- [Balanced Binary Tree Topics](balanced-tree.md)
+- [Reservoir Sampling](reservoid-sampling.md)
+- [Monotonic Stack](monotone-stack.md)
