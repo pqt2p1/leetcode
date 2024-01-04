@@ -1,39 +1,42 @@
 # Monotonic stack
 
-As the name suggests, a monotonic stack is a kind of stack. Therefore, to learn monotonic stacks, you must first thoroughly understand the stacks.
+As the name implies, a monotonic stack is a type of stack. So, to understand monotonic stacks, one must first thoroughly understand stacks.
 
 ## What is a stack?
 
 ![](https://p.ipic.vip/nkmnv8.jpg)
 
-The stack is a restricted data structure, which is reflected in the fact that only new content is allowed to be inserted or deleted from one direction. This direction is called the top of the stack, and obtaining content from other locations is not allowed.
+A stack is a limited data structure, characterized by allowing new content to be inserted or removed from only one direction, which we call the top of the stack. Accessing content from any other position is not allowed.
 
-The most distinctive feature of the stack is LIFO (Last In, First Out-last In, First Out)
+The most notable characteristic of a stack is LIFO (Last In, First Out).
 
-Give an example：
+For example:
 
-The stack is like a drawer for books. The operation of entering the stack is like trying to put a book in the drawer. The newly entered book is always at the top, while exiting the stack is equivalent to taking the book from the inside out, always starting from the top, so the one that is taken out is always the last one to go in.
+A stack is like a drawer for books. Pushing onto the stack is akin to putting a book into the drawer, where the newest book is always on top. Popping from the stack is like taking a book out of the drawer, always starting from the topmost book. Hence, the book taken out is always the last one that was put in.
 
-### Common operations of the stack
+### Common Stack Operations
 
-1. Stack-push-place elements to the top of the stack
-2. Backstack-pop-pop up the top element of the stack
-3. Stack top-top-get the value of the top element of the stack
-4. Whether the stack is empty-isEmpty-determines whether there are elements in the stack
+1. **Push**: Placing an element onto the top of the stack.
+2. **Pop**: Popping the top element from the stack.
+3. **Top**: Getting the value of the top element.
+4. **isEmpty**: Determining whether the stack has any elements.
 
-### Common operation time complexity of the stack
+### Time Complexity of Common Operations
 
-Since the stack only operates at the end, if we use arrays for simulation, the time complexity of O(1) can be easily achieved. Of course, it can also be implemented with a linked list, that is, a chain stack.
+Since stack operations are only performed at the end, if we simulate a stack with an array, we can easily achieve a time complexity of O(1). Of course, it can also be implemented with a linked list, i.e., a linked stack.
 
-1. In-stack-O (1)
-2. Out of the stack-O (1)
+1. Push - O(1)
+2. Pop - O(1)
 
 ![](https://p.ipic.vip/35ede1.jpg)
 
 ### Application
 
--Function call stack -Browser forward and backward -Matching brackets -The monotonic stack is used to find the next larger (smaller) element
-
+- Function Call Stacks
+- Browser Forward and Backward Navigation
+- Parenthesis Matching
+- Monotonic Stacks for finding the next greater (or smaller) element
+- 
 ### Topic recommendation
 
 - [394. String decoding](https://leetcode.com/problems/decode-string/description/)
