@@ -36,9 +36,9 @@ Since the stack only operates at the end, if we use arrays for simulation, the t
 
 ### Topic recommendation
 
-- [394. String decoding](https://leetcode-cn.com/problems/decode-string /)
-- [946. Verify stack sequence](https://leetcode-cn.com/problems/validate-stack-sequences /)
-- [1381. Design a stack that supports incremental operations](https://leetcode-cn.com/problems/design-a-stack-with-increment-operation /)
+- [394. String decoding](https://leetcode.com/problems/decode-string/description/)
+- [946. Verify stack sequence](https://leetcode.com/problems/validate-stack-sequences/description/)
+- [1381. Design a stack that supports incremental operations](https://leetcode.com/problems/design-a-stack-with-increment-operation/submissions/)
 
 ## What is the monotonic stack?
 
