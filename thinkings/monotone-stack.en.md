@@ -36,7 +36,7 @@ Since stack operations are only performed at the end, if we simulate a stack wit
 - Browser Forward and Backward Navigation
 - Parenthesis Matching
 - Monotonic Stacks for finding the next greater (or smaller) element
-- 
+  
 ### Topic recommendation
 
 - [394. String decoding](https://leetcode.com/problems/decode-string/description/)
