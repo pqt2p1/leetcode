@@ -40,56 +40,57 @@ Since the stack only operates at the end, if we use arrays for simulation, the t
 - [946. Verify stack sequence](https://leetcode.com/problems/validate-stack-sequences/description/)
 - [1381. Design a stack that supports incremental operations](https://leetcode.com/problems/design-a-stack-with-increment-operation/submissions/)
 
-## What is the monotonic stack?
+## What exactly is a monotonous stack?
 
-A monotonic stack is a special kind of stack. The stack is originally a restricted data structure, and the monotonic stack is restricted again (restricted ++) on this basis.
+A monotonous stack is a special kind of stack. A stack is already a limited data structure, and a monotonous stack imposes one more limitation on top of it (additional limitation).
 
-A monotonic stack requires that the elements in the stack are monotonically decreasing or monotonically decreasing.
+Monotonic stacks require that the elements in the stack are either monotonically increasing or decreasing.
 
-> Whether it is strictly decreasing or decreasing can be determined according to the actual situation.
+> Whether it's strictly increasing or decreasing depends on the actual situation.
 
-Here I use [a, b, c] to represent a stack. Among them, the left side is the bottom of the stack and the right side is the top of the stack. Monotonically increasing or monotonically decreasing depends on the order in which the stack is released. If the elements out of the stack are monotonically increasing, it is monotonically increasing the stack, and if the elements out of the stack are monotonically decreasing, it is monotonically decreasing the stack.
+Here, I'll use [a,b,c] to represent a stack, where the left side is the bottom of the stack and the right side is the top of the stack. Whether it's monotonically increasing or decreasing depends on the order of elements when they are popped out of the stack. If the elements are monotonically increasing when popped, it's called a monotonically increasing stack. If they are decreasing, it's called a monotonically decreasing stack.
 
 For example：
 
--[1,2,3,4] is a monotonically decreasing stack (because the order of stacks at this time is 4,3,2,1. The same below, not repeat them) -[3,2,1] is a monotonically increasing stack -[1,3,2] is not a legal monotonic stack
+[1,2,3,4] is a monotonically decreasing stack (because the order of popping is 4,3,2,1. Same below, not elaborated further)
+[3,2,1] is a monotonically increasing stack
+[1,3,2] is not a valid monotonous stack
+So, what is the use of this limitation? What kind of problems can this characteristic (feature) solve?
 
-So what is the use of this restriction? What kind of problem can this restriction (feature) solve?
+### Applicable Scenarios:
 
-### Applicable scenario
+Monotonous stacks are suitable for problems that involve finding **the next element greater or smaller than xxx**. So whenever you encounter these types of problems, you should think of monotonous stacks.
 
-The suitable topic for monotonic stack is to solve the following questions: **The next one is greater than xxx** or **The next one is less than xxx**. All when you have this kind of demand, you should think of monotonic stacks.
+> Why are monotonous stacks suitable for finding the next element greater or smaller than xxx? The reason is quite simple, and I will explain it through an example here.
 
-So why is the monotonic stack suitable for solving the problem of **The next one is greater than xxx** or **the next one is less than xxx**? The reason is very simple, let me explain it to you with an example.
+Let's take the example of a monotonically decreasing stack:
 
-> The example given here is a monotonically decreasing stack
+Suppose we need to push the array [1,3,4,5,2,9,6] into a monotonous stack one by one.
 
-For example, we need to press the array [1,3,4,5,2,9,6] into the monotonic stack in turn.
+1. First, push 1, the stack is now: [1]
+2. Continue to push 3, the stack is now: [1,3]
+3. Continue to push 4, the stack is now: [1,3,4]
+4. Continue to push 5, the stack is now: [1,3,4,5]
+5. If we continue to push 2, the stack is now: [1,3,4,5,2] which doesn't satisfy the characteristics of a monotonically decreasing stack, so it needs to be adjusted. How do we adjust? Since the stack only has a pop operation, we have no choice but to keep popping until it satisfies monotonically decreasing condition.
+6. Actually, we didn't push 2 yet, but first popped until pushing 2 still maintains a monotonically decreasing order. Then we push 2, so now the stack is: [1,2]
+7. Continue to push 9, the stack is now: [1,2,9]
+8. If we continue to push 6, it doesn't satisfy the characteristics of a monotonically decreasing stack, so we repeat the popping process until it does. Now the stack is: [1,2,6]
 
-1. First press 1, the stack at this time is:[1]
-2. Continue to press into 3, the stack at this time is: [1,3]
-3. Continue to press into 4, the stack at this time is: [1,3,4]
-4. Continue to press into 5, the stack at this time is: [1,3,4,5]
-5. **If **continues to press into 2, the stack at this time is: [1,3,4,5,2] does not meet the characteristics of monotonically decreasing the stack, so it needs to be adjusted. How to adjust? Since the stack only has pop operations, we have to keep pop until the monotonous decrement is satisfied.
-6. In fact, we did not press into 2 above, but first pop. Until pop is pressed into 2, we can still keep monotonically decreasing and then press into 2. At this time, the stack is: [1,2]
-7. Continue to press into 9, the stack at this time is: [1,2,9]
-8. **If **Continues to press into 6, the characteristics of the monotonically decreasing stack are not satisfied. We repeat the technique and continue to pop until the monotonically decreasing stack is satisfied. The stack at this time is: [1,2,6]
+Note that the stack is still non-empty. If some problems require all array information, it's very possible to fail certain test cases due to not considering the boundary. Here's a technique - the **sentinel method**, often used in monotonous stack algorithms.
 
-Note that the stack here is still non-empty. If some topics need to use all the array information, then it is very likely that all test cases cannot be passed because the boundaries are not considered. Here is a technique -**Sentinel Method**, which is often used in monotonic stack algorithms.
+For the above example, I can add an item smaller than the smallest item in the original array [1,3,4,5,2,9,6] on the right side, such as -1. Now the array is [1,3,4,5,2,9,6,-1]. This technique can simplify the code logic, so try to master it.
 
-For the above example, I can add an item smaller than the minimum value in the array to the right side of the original array [1,3,4,5,2,9,6], such as -1. The array at this time is [1,3,4,5,2,9,6, -1]. This technique can simplify the code logic, and everyone can master it as much as possible.
+If you understand the above example, it won't be hard to understand why monotonous stacks are suitable for finding the next greater or smaller element. For example, in the above case, we can easily find the first position smaller than itself after each element. Like for 3, its index is 1, the first index smaller than 3 is 4, 2's index is 4, the first index smaller than 2 is 0, but since it's after 2's index 4, it doesn't meet the condition, meaning there is no position smaller than 2 after itself.
 
-If you understand the above example, it is not difficult to understand why the monotonic stack is suitable for solving problems such as ** The next one is greater than xxx** or ** the next one is less than xxx**. For example, in the above example, we can easily find the position of the first one after it is smaller than itself. For example, the index of 3 is 1, the first index less than 3 is 4, the index of 2 is 4, and the first index less than 2 is 0, but it is after the index of 2 is 4, so it does not meet the condition, that is, there is no position after 2 that is less than 2 itself.
+In the example above, we started popping at step 6. The first popped out was 5, so the first index smaller than 5 after itself is 4. Similarly, for 3, 4, and 5 all popped out, it's also 4.
 
-In the above example, we started pop in step 6, and the first one that was pop out was 5, so the first index less than 5 after 5 is 4. Similarly, the 3, 4, and 5 that are pop out are all 4.
+If we use ans to represent the position of the first smaller element after itself, ans[i] represents the position of the first smaller element after arr[i], ans[i] being -1 means no such position exists, like the 2 mentioned earlier. Then, at this time, ans would be [-1,4,4,4,-1,-1,-1].
 
-If ans is used to denote the first position after arr[i] that is less than itself, ans[i] represents the first position after arr[i] that is less than arr[i], and ans[i] is -1 to indicate that such a position does not exist, such as the 2 mentioned earlier. Then the ans at this time is [-1,4,4,4,-1,-1,-1]。
+At step 8, we start popping again. This time what's popped out is 9, so the first index smaller than 9 after itself is 6.
 
-Step 8, we are starting to pop again. At this time, 9 pops up, so the first index less than 9 after 9 is 6.
+This algorithm can be summarized in one sentence: if pushing onto the stack still maintains monotonicity, then directly push. Otherwise, pop elements from the stack until pushing onto it maintains monotonicity. The principle of this algorithm can be summarized in one sentence: **the elements being popped out are all greater than the current element, and because the stack is monotonically increasing, the nearest smaller element after it is the current element**.
 
-The process of this algorithm is summed up in one sentence, **If the monotonicity can still be maintained after pressing the stack, then directly press. Otherwise, the elements of the stack will pop up first, and the monotonicity will be maintained until they are pressed in. ** The principle of this algorithm is summed up in one sentence, **The elements that are popped up are all larger than the current element, and since the stack is monotonically increasing, the nearest one that is smaller than itself after it is the current element.**
-
-Let's recommend a few questions for everyone. While the knowledge is still in your mind, hurry up and brush it up~
+Below are a few problems for you to practice while the knowledge is still fresh in your mind, hurry up and try them out~!
 
 ### Pseudocode
 
