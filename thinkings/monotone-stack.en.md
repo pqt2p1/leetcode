@@ -99,15 +99,15 @@ It is recommended that everyone implement it in a programming language that they
 
 ```py
 class Solution:
-def monostoneStack(self, arr: List[int]) -> List[int]:
-stack = []
-ans = Define an array of the same length as arr and initialize it to -1
-Cycle i in arr:
-While stack and arr[i]>arr[element at the top of the stack]:
-peek = Pop up the top element of the stack
-ans[peek] = i - peek
-stack. append(i)
-return ans
+    def monostoneStack(self, arr: List[int]) -> List[int]:
+        stack = []
+        ans = []  # Define an array of the same length as arr, and initialize it to -1
+        for i in range(len(arr)):  # Loop i in arr:
+            while stack and arr[i] > arr[stack[-1]]:  # while stack and arr[i] > arr[top of the stack]:
+                peek = stack.pop()  # pop the top of the stack
+                ans[peek] = i - peek
+            stack.append(i)
+        return ans
 ```
 
 **Complexity analysis**
@@ -122,15 +122,15 @@ Python3：
 
 ```py
 class Solution:
-def monostoneStack(self, T: List[int]) -> List[int]:
-stack = []
-ans = [0] * len(T)
-for i in range(len(T)):
-while stack and T[i] > T[stack[-1]]:
-peek = stack. pop(-1)
-ans[peek] = i - peek
-stack. append(i)
-return ans
+    def monostoneStack(self, T: List[int]) -> List[int]:
+        stack = []
+        ans = [0] * len(T)
+        for i in range(len(T)):
+            while stack and T[i] > T[stack[-1]]:
+                peek = stack.pop(-1)
+                ans[peek] = i - peek
+            stack.append(i)
+        return ans
 ```
 
 JS:
