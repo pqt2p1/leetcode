@@ -168,8 +168,9 @@ The following questions will help you understand the monotonic stack and let you
 
 ## Summary
 
-The monotonic stack is essentially a stack, and the stack itself is a restricted data structure. Its restriction refers to the fact that it can only operate at one end. The monotonic stack is further restricted on the basis of the stack, that is, the elements in the stack are required to maintain monotonicity at all times.
+The essence of a monotonous stack is still a stack, which is a type of limited data structure itself. Its limitation refers to the fact that operations can only be performed at one end. Monotonous stacks further limit the basic stack by requiring that the elements within always maintain monotonicity.
 
-Since the stack is monotonous, it is naturally suitable for solving the problem that the first position after it is smaller than its own position. If you encounter a topic and need to find the first topic after it that is smaller than its own position, you can consider using the monotonic stack.
 
-The writing method of monotonic stack is relatively fixed. You can refer to my pseudo-code to summarize a template by yourself. Applying it directly in the future can greatly improve the efficiency and fault tolerance of problem-solving.
+Since the elements in the stack are always monotonic, it is inherently suitable for solving problems like **finding the first position smaller than the element itself that comes after it**. If you encounter problems that require **finding the first position smaller than the element itself that comes after it**, consider using a monotonous stack.
+
+The approach to implementing a monotonous stack is relatively fixed. You can refer to my pseudocode and summarize a template for yourself. Direct application of this template in the future can greatly improve efficiency and reduce errors in problem-solving.
