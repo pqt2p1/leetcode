@@ -39,9 +39,9 @@ Since stack operations are only performed at the end, if we simulate a stack wit
   
 ### Topic recommendation
 
-- [394. String decoding](https://leetcode.com/problems/decode-string/description/)
-- [946. Verify stack sequence](https://leetcode.com/problems/validate-stack-sequences/description/)
-- [1381. Design a stack that supports incremental operations](https://leetcode.com/problems/design-a-stack-with-increment-operation/submissions/)
+- [394. Decode String](https://leetcode.com/problems/decode-string/description/)
+- [946. Validate Stack Sequences](https://leetcode.com/problems/validate-stack-sequences/description/)
+- [1381. Design a Stack With Increment Operation](https://leetcode.com/problems/design-a-stack-with-increment-operation/submissions/)
 
 ## What exactly is a monotonous stack?
 
