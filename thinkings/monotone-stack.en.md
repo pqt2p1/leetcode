@@ -162,7 +162,6 @@ The following questions will help you understand the monotonic stack and let you
 - [42. Pick up the rain](https://github.com/azl397985856/leetcode/blob/master/problems/42.trapping-rain-water.md "42. Pick up the rain")
 - [84. The largest rectangle in the histogram](https://github.com/azl397985856/leetcode/blob/master/problems/84.largest-rectangle-in-histogram.md "84. The largest rectangle in the histogram")
 - [739.Daily temperature](https://github.com/azl397985856/leetcode/blob/master/daily/2019-06-06.md "739. Daily temperature")
-
 - 316. Remove duplicate letters
 - 402. Remove K digits
 - 496. The next larger element I
