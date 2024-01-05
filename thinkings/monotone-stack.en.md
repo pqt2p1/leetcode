@@ -159,14 +159,14 @@ var monostoneStack = function (T) {
 
 The following questions will help you understand the monotonic stack and let you understand when you can use the monotonic stack for algorithm optimization.
 
-- [42. Pick up the rain](https://github.com/azl397985856/leetcode/blob/master/problems/42.trapping-rain-water.md "42. Pick up the rain")
-- [84. The largest rectangle in the histogram](https://github.com/azl397985856/leetcode/blob/master/problems/84.largest-rectangle-in-histogram.md "84. The largest rectangle in the histogram")
-- [739.Daily temperature](https://github.com/azl397985856/leetcode/blob/master/daily/2019-06-06.md "739. Daily temperature")
-- 316. Remove duplicate letters
-- 402. Remove K digits
-- 496. The next larger element I
-- 581. Shortest unordered continuous subarray
-- 901. Stock price span
+- [42. Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/description/)
+- [84. Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/description/)
+- [739. Daily Temperatures](https://leetcode.com/problems/daily-temperatures/description/)
+- [316. Remove Duplicate Letters](https://leetcode.com/problems/remove-duplicate-letters/description/)
+- [402. Remove K Digits](https://leetcode.com/problems/remove-k-digits/description/)
+- [496. Next Greater Element I](https://leetcode.com/problems/next-greater-element-i/description/)
+- [581. Shortest Unsorted Continuous Subarray](https://leetcode.com/problems/shortest-unsorted-continuous-subarray/description/)
+- [901. Online Stock Span](https://leetcode.com/problems/online-stock-span/description/)
 
 ## Summary
 
