@@ -1,43 +1,40 @@
 # Backtracking
 
-Backtracking is a technique in DFS. The backtracking method adopts [trial and error](https://zh.wikipedia.org/wiki/%E8%AF%95%E9%94%99) The thought, it tries to solve a problem step by step. In the process of step-by-step problem solving, when it finds that the existing step-by-step answers cannot be effectively answered correctly by trying, it will cancel the previous step or even the calculation of the previous few steps, and then try again to find the answer to the question through other possible step-by-step answers.
+Backtracking is a technique in DFS. It uses the [trial and error](https://zh.wikipedia.org/wiki/%E8%AF%95%E9%94%99) approach to solve a problem step by step. During the process of solving the problem step by step, when it finds that the existing step-by-step answer cannot get an effective and correct answer, it will `cancel the calculation of the previous step or even several steps, and then try to find the answer to the problem again through other possible step-by-step answers.`
 
-In layman's terms, backtracking is an algorithm that turns back if you can't get there.
+In popular terms, backtracking is an algorithm that turns back when it hits a dead end.
 
-The essence of backtracking is to enumerate all possibilities. Although sometimes some branches that cannot be the answer can be removed by pruning, in essence, it is still a violent enumeration algorithm.
+Backtracking can be abstracted into a tree structure, and it is a highly finite tree (N-ary tree). Backtracking solves the problem of finding subsets in a set, the size of the set is the number of forks of the tree, and the depth of the recursion constitutes the height of the tree.
 
-The backtracking method can be abstract as a tree structure, and it is a tree of limited height (N-prong tree). The backtracking method solves the problem of finding subsets in a collection. The size of the collection is the fork tree of the tree, the depth of recursion, and the height of the tree.
-
-Take a subset of the array [1,2,3] as an example：
+Take the subset of array [1,2,3] as an example:
 
 ![](https://p.ipic.vip/g9vawf.jpg)
 
 > The for loop is used to enumerate the division points. In fact, the interval dp division interval is a similar approach.
 
-As shown in the figure above, we will perform the operation of adding to the result set at each node.
+In the above figure, we will add to the result set at each node.
 
 ![](https://p.ipic.vip/1flyhe.jpg)
 
-For the gray nodes above, adding the result set is [1].
+For the gray nodes above, adding to the result set results in [1].
 
 ![](https://p.ipic.vip/mj1skc.jpg)
 
-The result set of this addition is [1,2].
+This addition to the result set results in [1,2].
 
 ![](https://p.ipic.vip/y9t2mb.jpg)
 
-The result set of this addition is [2,3], and so on. There are six subsets in total, namely [1], [1,2], [1,2,3], [2], [2,3] And [3].
+Adding to the result set here results in [2,3], and so on. There are a total of six subsets: [1], [1,2], [1,2,3], [2], [2,3], and [3].
 
-For the full arrangement problem, the leaf nodes will be added to the result set, but this is a matter of detail. After mastering the idea, everyone will learn the details and do more with less effort.
+For permutation problems, the elements are added to the result set at leaf nodes, but this is a detail. Once you grasp the idea, learning the details will be much more efficient.
 
-Let's take a look at how to write the specific code.
+Now let's take a look at how to write specific code.
 
-## Algorithm flow
-
+## Algorithm Flow
 1. Construct a spatial tree.
-2. Traverse.
-3. If you encounter a boundary condition, you will no longer search down and search for another chain instead.
-4. Achieve the target conditions and output the results.
+2. Traverse the tree.
+3. When encountering boundary conditions where it's not worth continuing the search, switch to another branch.
+4. Upon reaching the target condition, output the result.
 
 ## Algorithm Template
 
@@ -46,146 +43,139 @@ Pseudo code：
 ```js
 const visited = {}
 function dfs(i) {
-if (meet specific conditions) {
-// Return result or exit search space
-}
+	if (specific conditions are met) {
+		// Return the result or exit the search space
+	}
 
-Visited[i] = true// Mark the current status as searched
-dosomething(i) // Do some operations on i
-for (according to the next state j that i can reach) {
-if (! Visited[j]) { / / If status j has not been searched
-dfs(j)
-}
-}
-undo(i) // Restore i
+	visited[i] = true // Mark the current state as searched
+	dosomething(i) // Perform some operation on i
+	for (next state j reachable from i) {
+		if (!visited[j]) { // If state j has not been searched
+			dfs(j)
+		}
+	}
+	undo(i) // Undo i
 }
 ```
 
 ## Pruning
 
-Another test point for backtracking questions is pruning. By pruning properly, time can be effectively reduced. For example, I optimized the time of Stone game V from more than 900 ms to more than 500 ms through pruning operations.
+Another aspect of backtracking problems is pruning. By appropriately pruning, we can effectively reduce time complexity. For example, I optimized the time complexity of Stone Game V from over 900 ms to just over 500 ms through pruning.
 
-The skills of pruning in each question are different, but a simple principle is to avoid recursion that cannot be the answer at all.
+Pruning techniques vary for each problem, but a simple principle is to `avoid recursions that are fundamentally not the answer.`
 
-For example: [842. Split the array into a Fibonacci sequence](https://leetcode-cn.com/problems/split-array-into-fibonacci-sequence /)
+For example: [842. Split Array into Fibonacci Sequence](https://leetcode.com/problems/split-array-into-fibonacci-sequence/)
 
-Title description：
+Problem description：
 
 ```
-Given a numeric string S, such as S= "123456579", we can divide it into a Fibonacci sequence [123, 456, 579].
+Given a digit string S, such as S = "123456579", we can split it into a Fibonacci-like sequence [123, 456, 579].
 
-Formally, a Fibonacci sequence is a list of non-negative integers F, and satisfies：
+Formally, a Fibonacci-like sequence is a list F of non-negative integers such that:
 
-0<=F[i] <= 2^31 - 1，（ In other words, every integer conforms to the 32-bit signed integer type)；
-F. length >= 3；
-For all 0 <=i<F. Length-2, all have F[i] +F[i+1] = F[i+2] established.
-In addition, please note that when splitting a string into small pieces, the number of each block must not start with zero, unless the block is the number 0 itself.
+0 <= F[i] <= 2^31 - 1, (i.e., each integer fits in a 32-bit signed integer type.)
+F.length >= 3;
+and for all0 <= i < F.length - 2, F[i] + F[i+1] = F[i+2].
+Additionally, for every block in the split string, each block's digits (except for possibly the first block) may not begin with 0, and each block must not contain leading zeroes. Except for the first block, each subsequent block's digits must not begin with 0.
 
-Returns any set of Fibonacci sequence blocks split from S, or [] if it cannot be split.
+Return any Fibonacci-like sequence split from S, or return [] if it cannot be done.
 
 
 
-Example 1：
+Example 1:
 
 Input: "123456579"
 Output: [123,456,579]
-Example 2：
+Example 2:
 
 Input: "11235813"
 Output: [1,1,2,3,5,8,13]
-Example 3：
+Example 3:
 
 Input: "112358130"
 Output: []
-Explanation: This task cannot be completed.
-Example 4：
+Explanation: The task is impossible.
+Example 4:
 
 Input: "0123"
-Output:[]
-Explanation: The number of each block cannot start with zero, so "01"，"2"，"3" Not a valid answer.
-Example 5：
+Output: []
+Explanation: Each block must not contain leading zeroes, so "01", "2", "3" is not valid.
+Example 5:
 
 Input: "1101111"
 Output: [110, 1, 111]
-Explanation: The output [11,0,11,11] is also accepted.
-
-
-prompt：
-
-1 <= S. length <= 200
-The string S contains only numbers.
+Explanation: Output [11,0,11,11] would also be accepted.
 ```
 
-It is better to solve it directly by backtracking the template. But if you don't prune appropriately, it's easy to time out. Here I performed four pruning operations, depending on the code for details.
+You can still use the backtracking template directly to solve this problem. However, if appropriate pruning is not done, it's easy to exceed the time limit. Here, I perform four pruning operations, as seen in the code:
 
 ```py
 class Solution:
-def splitIntoFibonacci(self, S: str) -> List[int]:
-def backtrack(start, path):
-#Pruning 1
-if len(path) > 2 and path[-1] ! = path[-2] + path[-3]:
-return []
-if start >= len(S):
-if len(path) > 2:
-return path
-return []
+    def splitIntoFibonacci(self, S: str) -> List[int]:
+        def backtrack(start, path):
+            # Pruning 1
+            if len(path) > 2 and path[-1] != path[-2] + path[-3]:
+                return []
+            if start >= len(S):
+                if len(path) > 2:
+                    return path
+                return []
 
-cur = 0
-ans = []
-# Enumerate split points
-for i in range(start, len(S)):
-# Pruning 2
-if i > start and S[start] == '0':
-return []
-cur = cur * 10 + int(S[i])
-# Pruning 3
-if cur > 2**31 - 1:
-return []
-path. append(cur)
-ans = backtrack(i + 1, path)
-# Pruning 4
-if len(ans) > 2:
-return ans
-path. pop()
-return ans
+            cur = 0
+            ans = []
+            # Enumerate splitting points
+            for i in range(start, len(S)):
+                # Pruning 2
+                if i > start and S[start] == '0':
+                    return []
+                cur = cur * 10 + int(S[i])
+                # Pruning 3
+                if cur > 2**31 - 1:
+                    return []
+                path.append(cur)
+                ans = backtrack(i + 1, path)
+                # Pruning 4
+                if len(ans) > 2:
+                    return ans
+                path.pop()
+            return ans
 
-return backtrack(0, [])
-
+        return backtrack(0, [])
 ```
 
-The pruning process is graphically represented like this：
+The pruning process can be represented graphically as follows:
 
 ![](https://p.ipic.vip/bjh1zs.jpg)
 
-**Pruning algorithm is a major test point for backtracking, everyone must be able to master it. **
+**Pruning algorithms are a major focus of backtracking problems, which you should master.**
 
-## Cartesian product
+## Cartesian Product
 
-For some backtracking topics, we can still use the Cartesian product method to save the result in the return value instead of the path, thus avoiding the backtracking state, and since the result is in the return value, we can use memorized recursion to optimize it into a form of dynamic programming.
+For some backtracking problems, we can still use the Cartesian product method to store the results in the return value instead of the path. This avoids backtracking state, and since the results are in the return value, we can use memoization recursion to optimize it into a dynamic programming form.
 
-Reference title：
+Refer to problems like:
 
-- [140. Word Split II](https://github.com/azl397985856/leetcode/blob/master/problems/140.word-break-ii.md)
-- [401. Binary watch](../problems/401.binary-watch.md)
-- [816. Fuzzy coordinates](https://github.com/azl397985856/leetcode/blob/master/problems/816.ambiguous-coordinates.md)
+- [140. Word Break II](https://leetcode.com/problems/word-break-ii/)
+- [401. Binary Watch](../problems/401.binary-watch.md)
+- [816. Ambiguous Coordinates](https://github.com/azl397985856/leetcode/blob/master/problems/816.ambiguous-coordinates.md)
 
-This kind of problem is different from subsets and permutations. The combination is regular. We can use the Cartesian product formula to combine two or more subsets.
+Unlike subset and permutation problems, the combinations in this type of problem follow a pattern, and we can use the Cartesian product formula to combine two or more subsets.
 
 ## Classic title
 
-- [39. Combination sum)(../problems/39.combination-sum.md)
-- [40. Combination sum II](../problems/40.combination-sum-ii.md)
-- [46. Full arrangement](../problems/46.permutations.md)
-- [47. Full arrangement II](../problems/47.permutations-ii.md)
+- [39. Combination Sum)(../problems/39.combination-sum.md)
+- [40. Combination Sum II](../problems/40.combination-sum-ii.md)
+- [46. Permutations](../problems/46.permutations.md)
+- [47. Permutations II](../problems/47.permutations-ii.md)
 - [52. N Queen II](../problems/52.N-Queens-II.md)
 - [78. Subsets)(../problems/78.subsets.md)
 - [90. Subsets II](../problems/90.subsets-ii.md)
 - [113. Path sum II)(../problems/113.path-sum-ii.md)
-- [131. Split palindrome string](../problems/131.palindrome-partitioning.md)
-- [1255. Collection of words with the highest score](../problems/1255.maximum-score-words-formed-by-letters.md)
+- [131. Palindrome Partitioning](../problems/131.palindrome-partitioning.md)
+- [1255. Maximum Score Words Formed by Letters](../problems/1255.maximum-score-words-formed-by-letters.md)
 
 ## Summary
 
-The essence of backtracking is to violently enumerate all possibilities. It should be noted that since the result set of backtracking is usually recorded on the path of the backtracking tree, if the undo operation is not performed, the state may be incorrect after the backtracking and the results may be different. Therefore, it is necessary to undo the state when it is bubbling up from the bottom of the recursion.
+The essence of backtracking is to enumerate all possibilities. It's important to note that since backtracking usually records the result set on the path of the backtracking tree, if the state is not undone after backtracking, the result may differ due to incorrect state after backtracking. Therefore, it's necessary to undo the state when bubbling up recursively from the bottom.
 
-If you copy a copy of data every time you recursively process, there is no need to undo the state, and the relative spatial complexity will increase.
+If you make a copy of the data each time you recurse, you don't need to undo the state, but the space complexity will increase relatively.
