@@ -58,6 +58,21 @@ function dfs(i) {
 }
 ```
 
+
+```Python 
+def dfs(i, visited):
+    if specific_conditions_are_met:
+        # Return the result or exit the search space
+        return
+
+    visited[i] = True  # Mark the current state as searched
+    do_something(i)  # Perform some operation on i
+    for j in next_states_reachable_from_i:
+        if j not in visited:  # If state j has not been searched
+            dfs(j, visited)
+    undo(i)  # Undo i
+```
+
 ## Pruning
 
 Another aspect of backtracking problems is pruning. By appropriately pruning, we can effectively reduce time complexity. For example, I optimized the time complexity of Stone Game V from over 900 ms to just over 500 ms through pruning.
